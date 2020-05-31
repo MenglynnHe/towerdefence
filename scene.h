@@ -56,17 +56,20 @@ public:
     int						waves;
     int                     baselife;//记录你放了多少塔
     int                     killed_enemies;
+    bool                    gameEnded;
+    bool                    gameWin;
     void drawWave();
     void drawbaselife();
     void drawkillednum();//击杀的敌人数
     void getbaselife();
     void getkilled_enemies();
+    void dogameover();
     QLabel* WaveFront = new QLabel(this);
     QLabel* baselifeFront = new QLabel(this);
     QLabel* MoneyFront = new QLabel(this);
     QLabel* killedFront = new QLabel(this);
 private:
-
+     Tower *  currenttower;
      QLabel * lab1= new QLabel(this);
      QLabel * lab2= new QLabel(this);
      QLabel * lab3= new QLabel(this);

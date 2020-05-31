@@ -17,6 +17,8 @@ Scene::Scene(QWidget *parent) : QLabel(parent),
   ,haveMoney(1000)
   ,baselife(0)
   ,killed_enemies(0)
+  ,gameEnded(false)
+  ,gameWin(false)
 {    this->setMouseTracking(true);
     this->setFixedSize(1200, 639);
     this->show();
@@ -57,7 +59,7 @@ Scene::~Scene(){
     delete  this->baselifeFront ;
     delete  this->MoneyFront ;
     delete this->killedFront;
-
+    delete currenttower;
 
     foreach (Copy *copy, towerCopy)
     {
@@ -69,10 +71,24 @@ Scene::~Scene(){
 
 }
 void Scene::paintEvent(QPaintEvent *){
+  if(gameEnded||gameWin)//赢了或结束了，结束即输了
+{
+      if(gameWin){
+      QPixmap loseScene(":/picture/title.png");
+      QPainter painter(this);
+      painter.drawPixmap(0, 0, loseScene);
 
+      }
 
+      if(gameEnded)
+      {
+          QPixmap loseScene(":/picture/title.png");
+          QPainter painter(this);
+          painter.drawPixmap(0, 0, loseScene);
+      }
+      return;
 
-
+}
     QPixmap backgroundPix(":/picture/timga.png"); //背景
    // QPixmap copybarPix(":/picture/copybase.png"); //放置基塔的状态栏
     QPainter cachePainter(&backgroundPix);
@@ -150,11 +166,62 @@ void Scene::mouseMoveEvent(QMouseEvent *event)
 }
 
 void Scene::mousePressEvent(QMouseEvent *event)
-{
+{ QPoint pressPos = event->pos();
+    int pos_x = pressPos.x();
+    int pos_y = pressPos.y();
+
+    //拆塔实现
+    if (settleCopy == nullptr){
+        auto it = m_towerPositionsList.begin();
+        while (it != m_towerPositionsList.end())
+        {
+            if (settleCopy == nullptr && it->containPoint(pressPos) && it->hasTower())
+            {
+
+                currenttower = it->m_tower;    //把当前tower赋给currenttower
+                if (event->button() == Qt::RightButton)
+             {
+
+                    delete it->m_tower;
+                    m_towersList.removeOne(it->m_tower);
+                   // this->settleCopy->move(this->whichtowerPos);
+                  //  this->settleCopy = nullptr;
+                    it->m_hasTower=false;
+                    return;
+                }
+            }
+             ++it;
+        }
+    }
+//         if (settleCopy == nullptr){
+//             auto it = m_towerPositionsList.begin();
+//             while (it != m_towerPositionsList.end())
+//             {
+//                 if ( it->containPoint(pressPos) && it->hasTower())
+//                 {
+//                     delete it->m_tower;
+//                      m_towersList.removeOne(it->m_tower);
+//                     this->settleCopy->move(this->whichtowerPos);
+//                     this->settleCopy = nullptr;
+//                     return;
+//                 }
+//             }
+//     }
+//     }
+//    for (int i = 0; i < m_towersList.count(); i++)
+//    {
+//        if (settleCopy == nullptr){
+//            if (event->button() == Qt::RightButton)
+//            {
+//            delete m_towersList[i];
+//            m_towersList.removeAt(i);
+//            this->settleCopy->move(this->whichtowerPos);
+//            this->settleCopy = nullptr;
+//            return;
+//        }
+//    }
+//     }
     //鼠标点的赋值
-        QPoint pressPos = event->pos();
-        int pos_x = pressPos.x();
-        int pos_y = pressPos.y();
 
         qDebug()<<pos_x<<" "<<pos_y<<endl;
     //让塔可以放在塔部，没有点塔放不上去
@@ -641,7 +708,19 @@ void Scene::drawkillednum(){
 }
 void Scene::getbaselife(){
     baselife++;
+    qDebug()<<"baselife"<<baselife<<endl;
+    if(baselife>1)
+       {
+        qDebug()<<"dogameover"<<endl;
+       // dogameover();
+}
 }
 void Scene::getkilled_enemies(){
     killed_enemies++;
+}
+
+void Scene::dogameover()
+{if (!gameEnded)
+    {
+        gameEnded = true;}
 }

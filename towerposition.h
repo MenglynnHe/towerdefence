@@ -19,9 +19,10 @@ public:
 
     void draw(QPainter *painter) const;
     Tower*       m_tower;
+    bool		m_hasTower;
 private:
     QPoint		m_pos;
-    bool		m_hasTower;
+
     QPixmap		m_sprite;
 
     static const QSize ms_fixedSize;
