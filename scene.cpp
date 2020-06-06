@@ -11,10 +11,10 @@
 #include "QTimer"
 #include "copy.h"
 #include "enemy.h"
-
+static const int TowerCost = 200;
 Scene::Scene(QWidget *parent) : QLabel(parent),
     waves(0)
-  ,haveMoney(1000)
+  ,haveMoney(10000)
   ,baselife(0)
   ,killed_enemies(0)
   ,gameEnded(false)
@@ -25,8 +25,13 @@ Scene::Scene(QWidget *parent) : QLabel(parent),
     loadTowerPositions();
 
     addPathPoints();
-     preLoadWavesInfo();
+    preLoadWavesInfo();
+//每100ms更新一次灼烧状态
+    QTimer *Firetime = new QTimer(this);
+    connect(Firetime, SIGNAL(timeout()), this, SLOT(MorIceattack()));
+    Firetime->start(100);
 
+//每30ms发送一个更新信号
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateMap()));
     timer->start(30);
@@ -34,6 +39,25 @@ Scene::Scene(QWidget *parent) : QLabel(parent),
     setTowerup();
      QTimer::singleShot(300, this, SLOT(gameStart()));
 
+}
+void Scene::MorIceattack()
+{
+    foreach(Enemy *enemy, m_enemyList){
+
+        if(enemy->ice != 0){
+            enemy->ice--;
+            if (enemy->ice == 0)
+            {//减速时间过了
+                enemy->m_walkingSpeed = enemy->m_normalSpeed;//回到正常速度
+                enemy->m_slowSpeed = enemy->m_normalSpeed;
+            }
+            else
+            {
+                enemy->m_walkingSpeed = enemy->m_slowSpeed;
+            }
+        }
+
+    }
 }
 Scene::~Scene(){
     delete this->lab1;
@@ -53,7 +77,9 @@ Scene::~Scene(){
     delete this-> copyBarPic;
 
     delete this-> statusBar;
-     delete this-> statusBarPic;
+    delete this-> statusBarPic;
+    delete this->attributeBar;
+    delete this->attributeBarPic;
 
     delete this->WaveFront ;
     delete  this->baselifeFront ;
@@ -61,13 +87,39 @@ Scene::~Scene(){
     delete this->killedFront;
     delete currenttower;
 
+    delete this->attack;    
+    delete this->attackRate;
+    delete this->Level;
+    delete this->upgradebar1;
+    delete this->upgradeBar1;
+    delete this->upgradeBar2;
+    delete this->upgradebar2;
+    delete this->upgradeBar3;
+    delete this->upgradebar3;
+
     foreach (Copy *copy, towerCopy)
     {
         Q_ASSERT(copy);
         towerCopy.removeOne(copy);
         delete copy;
     }
-
+    foreach (Enemy *enemy, m_enemyList)
+    {
+        Q_ASSERT(enemy);
+        m_enemyList.removeOne(enemy);
+        delete enemy;
+    }
+    foreach (Bullet *bullet, bulletList)
+    {
+        Q_ASSERT(bullet);
+        removedBullet(bullet);
+        delete bullet;
+    }
+    foreach (BloodBar *bloodbar, bloodbarList){
+        Q_ASSERT(bloodbar);
+        removedBlood(bloodbar);
+        delete bloodbar;
+    }
 
 }
 void Scene::paintEvent(QPaintEvent *){
@@ -166,22 +218,25 @@ void Scene::mouseMoveEvent(QMouseEvent *event)
 }
 
 void Scene::mousePressEvent(QMouseEvent *event)
-{ QPoint pressPos = event->pos();
+{ //鼠标点的赋值
+    QPoint pressPos = event->pos();
     int pos_x = pressPos.x();
     int pos_y = pressPos.y();
 
-    //拆塔实现
+//**拆塔实现**
     if (settleCopy == nullptr){
         auto it = m_towerPositionsList.begin();
         while (it != m_towerPositionsList.end())
         {
             if (settleCopy == nullptr && it->containPoint(pressPos) && it->hasTower())
+
             {
 
                 currenttower = it->m_tower;    //把当前tower赋给currenttower
+                towerkind=it->m_tower->kind;
+//右键拆塔
                 if (event->button() == Qt::RightButton)
              {
-
                     delete it->m_tower;
                     m_towersList.removeOne(it->m_tower);
                    // this->settleCopy->move(this->whichtowerPos);
@@ -189,41 +244,103 @@ void Scene::mousePressEvent(QMouseEvent *event)
                     it->m_hasTower=false;
                     return;
                 }
+//否则升级,即左键
+                else{
+                    //加上英雄属性栏
+                    if(towerkind==0)
+                  { attributeBar->setGeometry(270,529,239,109);
+                    attributeBarPic->start();
+                    attributeBar->show();
+                    attributeBar->setPixmap(QPixmap(":/picture/attribute.png"));
+                    }
+
+
+                    Level->setText(QString("%1").arg(it->m_tower->m_level));
+                    Level->show();
+                    Level->raise();
+
+
+                    attack->setText(QString("%1").arg(it->m_tower->returnAttack()));
+                    attack->show();
+                    attack->raise();
+
+                    attackRate->setText(QString("%1").arg(it->m_tower->getRate()));
+                    attackRate->show();
+                    attackRate->raise();
+                    upgradestate = 1;//已经放塔了，可以升级了
+                    }
             }
              ++it;
         }
     }
-//         if (settleCopy == nullptr){
-//             auto it = m_towerPositionsList.begin();
-//             while (it != m_towerPositionsList.end())
-//             {
-//                 if ( it->containPoint(pressPos) && it->hasTower())
-//                 {
-//                     delete it->m_tower;
-//                      m_towersList.removeOne(it->m_tower);
-//                     this->settleCopy->move(this->whichtowerPos);
-//                     this->settleCopy = nullptr;
-//                     return;
-//                 }
-//             }
-//     }
-//     }
-//    for (int i = 0; i < m_towersList.count(); i++)
-//    {
-//        if (settleCopy == nullptr){
-//            if (event->button() == Qt::RightButton)
-//            {
-//            delete m_towersList[i];
-//            m_towersList.removeAt(i);
-//            this->settleCopy->move(this->whichtowerPos);
-//            this->settleCopy = nullptr;
-//            return;
-//        }
-//    }
-//     }
-    //鼠标点的赋值
+      qDebug()<<pos_x<<" "<<pos_y<<endl;
+//************
+//**upupupup**
+//************
+      if(upgradestate )//可升级，不然直接点升级的label会崩
+      {
+//ashe-upgrade
+          if ((pos_x >= 510 && pos_x <= 550 && pos_y >= 490 && pos_y <= 530 && currenttower->m_level != 19)
+                  &&towerkind==0)
+      {
+          int level = currenttower->m_level;
+          int gold = 80 + level*10;
+          if (haveMoney >= gold)
+          {
+              haveMoney -= gold;
+              currenttower->upgrade();//塔升级要增强相关属性
+            //  stateBar(currenttower);
+              //这里用函数会异常????????
+              Level->setText(QString("%1").arg(currenttower->m_level));
+              Level->show();
+              Level->raise();
 
-        qDebug()<<pos_x<<" "<<pos_y<<endl;
+
+
+              attack->setText(QString("%1").arg(currenttower->returnAttack()));
+              attack->show();
+              attack->raise();
+
+              attackRate->setText(QString("%1").arg(currenttower->getRate()));
+              attackRate->show();
+              attackRate->raise();
+
+          }
+
+      }
+//tris-upgrade
+          else if((pos_x >= 570 && pos_x <= 610 && pos_y >= 490 && pos_y <= 530 && currenttower->m_level != 19)
+                  &&towerkind==1)
+          {
+              int level = currenttower->m_level;
+              int gold = 80 + level*10;
+              if (haveMoney >= gold)
+              {
+                  haveMoney -= gold;
+                  currenttower->upgrade();//塔升级要增强相关属性
+
+                 // stateBar(currenttower);
+              }
+
+          }
+//Morgana-upgrade
+          else if((pos_x >= 625 && pos_x <= 665 && pos_y >= 490 && pos_y <= 530 && currenttower->m_level != 19)
+                  &&towerkind==2)
+          {
+              int level = currenttower->m_level;
+              int gold = 80 + level*10;
+              if (haveMoney >= gold)
+              {
+                  haveMoney -= gold;
+                  currenttower->upgrade();//塔升级要增强相关属性
+                //  stateBar(currenttower);
+              }
+
+          }
+
+}
+
+
     //让塔可以放在塔部，没有点塔放不上去
         if(settleCopy!= nullptr){
             bool temp = 0;//判断是否所有塔基上都建立了塔
@@ -296,27 +413,6 @@ void Scene::mousePressEvent(QMouseEvent *event)
       }
 
 
-//    QPoint pressPos = event->pos();//把鼠标的点给presspos
-//    QString str= QString("鼠标按下 x=%1  y=%2").arg(event->x()).arg(event->y());
-//    qDebug()<<str;
-//    auto it = m_towerPositionsList.begin();
-//    while (it != m_towerPositionsList.end())
-//    {
-//        if (canBuyTower() && it->containPoint(pressPos) && !it->hasTower())//可以买塔，鼠标点到了框内且框中无塔
-//        {
-//            //m_audioPlayer->playSound(TowerPlaceSound);
-//            //m_playrGold -= TowerCost;
-//            it->setHasTower();//放塔
-
-//            Tower *tower = new Tower(it->centerPos(), this);//塔的中心点
-//            m_towersList.push_back(tower);
-//            update();
-//            break;
-//        }
-
-//        ++it;
-//    }
-
 //        if (QRect(400, 400, 600,600).contains(event->pos()))//如果鼠标点到了这个矩形区域
 //        {
 //            emit toPlay();
@@ -327,6 +423,9 @@ void Scene::mousePressEvent(QMouseEvent *event)
 
 bool Scene::canBuyTower() const
 {
+    if(haveMoney<TowerCost)
+
+        return false;
     return true;
 }
 void Scene::setTowerup(){
@@ -463,6 +562,49 @@ void Scene::setTowerup(){
    killedFront->show();
    killedFront->raise();
 
+//级数
+   Level->setGeometry(454,600, 50, 30);
+   Level->setFont(QFont("Calibri", 12));
+   Level->setStyleSheet("color:white");
+   Level->setAlignment(Qt::AlignHCenter);
+   Level->show();
+   Level->raise();
+//攻击力
+   attack->setGeometry(309,537, 100, 80);
+   attack->setFont(QFont("Calibri", 18));
+   attack->setAlignment(Qt::AlignHCenter);
+   attack->setStyleSheet("color:yellow");
+   attack->show();
+   attack->raise();
+//攻速
+   attackRate->setGeometry(309,581, 100, 80);
+   attackRate->setFont(QFont("Calibri", 18));
+   attackRate->setAlignment(Qt::AlignHCenter);
+   attackRate->setStyleSheet("color:yellow");
+   attackRate->show();
+   attackRate->raise();
+// draw upgradebar
+   upgradeBar1->setGeometry(510,491, 40, 40);
+   upgradeBar1->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
+   upgradebar1->start();
+   upgradeBar1->show();
+   upgradeBar1->setMovie(upgradebar1);
+   upgradeBar1->raise();
+
+   upgradeBar2->setGeometry(570,491, 40, 40);
+   upgradeBar2->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
+   upgradebar2->start();
+   upgradeBar2->show();
+   upgradeBar2->setMovie(upgradebar2);
+   upgradeBar2->raise();
+
+   upgradeBar3->setGeometry(625,491, 40, 40);
+   upgradeBar3->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
+   upgradebar3->start();
+   upgradeBar3->show();
+   upgradeBar3->setMovie(upgradebar3);
+   upgradeBar3->raise();
+
 }
 
 
@@ -504,7 +646,7 @@ void Scene::setCopyup()
 
 void Scene::addPathPoints()
 {
-    TravelPath *TravelPoint1 = new TravelPath(QPoint(1172,375));
+    TravelPath *TravelPoint1 = new TravelPath(QPoint(1120,375));
     m_pathPointsList.push_back(TravelPoint1);
 
     TravelPath *TravelPoint2 = new TravelPath(QPoint(1072, 375));
@@ -539,8 +681,9 @@ void Scene::addPathPoints()
 void Scene::removedEnemy(Enemy *enemy)
 {
     Q_ASSERT(enemy);
-
+    bloodbarList.removeOne(enemy->blood);
     m_enemyList.removeOne(enemy);
+
     delete enemy;
    // Scene::removedBlood();
     if (m_enemyList.empty())
@@ -554,7 +697,7 @@ void Scene::removedEnemy(Enemy *enemy)
         }
     }
 }
-void Scene::removedBlood(BloodBar *blood){
+void Scene::removedBlood(BloodBar *blood){//多余了
     bloodbarList.removeOne(blood);
     delete blood;
 }
@@ -644,8 +787,9 @@ bool Scene::loadWave()
         m_enemyList.push_back(enemy);
        // qDebug()<<"enemy push back"<<endl;
 
-        BloodBar * blood=new BloodBar(enemy,this);
-        bloodbarList.push_back(blood);
+ //       BloodBar * blood=new BloodBar(enemy,this);
+
+        bloodbarList.push_back(enemy->blood);
       //  qDebug()<<"blood push back"<<endl;
 
         QTimer::singleShot(spawnTime, enemy, SLOT(setFree()));//延迟spawnTime
@@ -665,8 +809,11 @@ void Scene::updateMap()
     foreach (Enemy *enemy, m_enemyList)
         enemy->move();
 
+
     foreach (Tower *tower, m_towersList)
         tower->checkEnemyInRange();
+    foreach (BloodBar *blood, bloodbarList)
+        blood->check();
     update();
 }
 void Scene::gameStart(){
@@ -723,4 +870,17 @@ void Scene::dogameover()
 {if (!gameEnded)
     {
         gameEnded = true;}
+}
+void Scene::stateBar(Tower * nowtower){
+    Level->setText(QString("%1").arg(nowtower->m_level));
+    Level->show();
+    Level->raise();
+
+    attack->setText(QString("%1").arg(nowtower->returnAttack()));
+    attack->show();
+    attack->raise();
+
+    attackRate->setText(QString("%1").arg(nowtower->getRate()));
+    attackRate->show();
+    attackRate->raise();
 }

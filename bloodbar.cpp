@@ -1,7 +1,8 @@
 #include "bloodbar.h"
 #include <QPainter>
 #include "QDebug"
-BloodBar::BloodBar(Enemy *parent,Scene *game)
+BloodBar::BloodBar(Enemy *parent,Scene *game):
+    parent(nullptr)
 {   this->game=game;
     this->parent=parent;
     setMinimum(0);//设置进度条的最小值
@@ -16,10 +17,13 @@ BloodBar ::~BloodBar(){
 
 }
 void BloodBar::draw(QPainter *p)
-{if(parent->getLife()<=0||parent->getpos().x()>1170)
-    {getremoved();
-return ;
-    }
+{/*
+    if(parent->getLife()<=0)
+    {
+        getremoved();
+        qDebug()<<"bloodbar getremoved"<<endl;
+
+    }*/
     if (!parent->ifFree)//空闲状态的enemy
         return;
    // qDebug()<<"draw bloodbar"<<endl;
@@ -48,4 +52,7 @@ return ;
 }
 void BloodBar::getremoved(){
      game->removedBlood(this);
+}
+void BloodBar::check(){
+
 }

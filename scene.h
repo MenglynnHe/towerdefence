@@ -49,6 +49,8 @@ public:
     void drawhaveMoney();
     int haveMoney;
     int settletower=-1;//默认最开始的塔为-1---ashetower
+    int upgradestate = 0;//表示能否升级的状态
+    int towerkind;
     Copy* settleCopy=nullptr;//确定要安装的塔的复印件
     QList<Copy*> towerCopy;
     QPoint whichtowerPos;//记录你选择的基塔的位置，之后移动基塔后还得放回去
@@ -64,10 +66,21 @@ public:
     void getbaselife();
     void getkilled_enemies();
     void dogameover();
+    void stateBar(Tower * nowtower);
     QLabel* WaveFront = new QLabel(this);
     QLabel* baselifeFront = new QLabel(this);
     QLabel* MoneyFront = new QLabel(this);
     QLabel* killedFront = new QLabel(this);
+
+    QLabel* attack      = new QLabel(this);
+    QLabel* attackRate   = new QLabel(this);
+    QLabel* Level       = new QLabel(this);
+    QLabel* upgradeBar1 = new QLabel(this);
+    QMovie* upgradebar1 = new QMovie(":/picture/upgrade.png");
+    QLabel* upgradeBar2 = new QLabel(this);
+    QMovie* upgradebar2 = new QMovie(":/picture/upgrade.png");
+    QLabel* upgradeBar3 = new QLabel(this);
+    QMovie* upgradebar3 = new QMovie(":/picture/upgrade.png");
 private:
      Tower *  currenttower;
      QLabel * lab1= new QLabel(this);
@@ -88,6 +101,8 @@ private:
      QMovie* copyBarPic = new QMovie(":/picture/copybase.png");
      QLabel* statusBar = new QLabel(this);
      QMovie* statusBarPic = new QMovie(":/picture/statebar.png");
+     QLabel* attributeBar = new QLabel(this);
+     QMovie* attributeBarPic = new QMovie(":/picture/attribute.png");
      QList<Enemy *>			m_enemyList;
      QList<Bullet *>			bulletList;
      QList<QVariant>			wavesInfo;
@@ -100,6 +115,7 @@ signals:
 public slots:
     void updateMap();
     void gameStart();
+    void MorIceattack();//攻击效果实现，只有Mor控制效果和ashe的减速效果
 };
 
 

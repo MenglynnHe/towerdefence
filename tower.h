@@ -28,10 +28,23 @@ public:
     Tower(QPoint pos,Scene * game,const   QPixmap &sprite= QPixmap(":/picture/towerashe.png") );
     ~Tower();
     virtual void draw(QPainter *painter) const;//画塔
+    void drawelli(QPainter *painter) const;
     void checkEnemyInRange();
     void forgiveEnemy();
     void set_attacked_Enemy(Enemy *enemy);//改变这个enemy的状态
     void targetKilled();
+    int getRange(){
+        return attackRange;
+    }
+    int returnAttack(){
+        return damage;
+    }
+    int getRate(){
+        return attackRate;
+    }
+    int             m_level;
+    int             kind;
+    virtual void upgrade() = 0;
 protected:
     int            timerId2;
     bool			attacking;
@@ -40,6 +53,7 @@ protected:
     int				attackRange;	// 代表塔可以攻击到敌人的距离
     int				damage;		// 代表攻击敌人时造成的伤害
     int				attackRate;		// 代表再次攻击敌人的时间间隔
+
 
     const QPoint	pos; //塔的圆心
     const QPixmap	icon; //塔的图片
@@ -61,12 +75,14 @@ class AsheTower: public Tower
 public:
     AsheTower(QPoint pos, Scene * game, const QPixmap &sprite = QPixmap(":/picture/towerashe.png"));
     ~AsheTower();
+    virtual void upgrade() ;
 
-   // void levelup();
 
 
 protected slots:
     virtual void startShooting();
+private:
+    qreal         toslow;
 };
 
 class TristanaTower: public Tower
@@ -76,7 +92,7 @@ public:
    TristanaTower(QPoint pos, Scene * game, const QPixmap &sprite = QPixmap(":/picture/tristower.png"));
     ~TristanaTower();
 
-   // void levelup();
+    virtual void upgrade() ;
 
 protected slots:
     virtual void startShooting();
@@ -89,7 +105,7 @@ public:
    MorganaTower(QPoint pos, Scene * game, const QPixmap &sprite = QPixmap(":/picture/Morgana.png"));
     ~MorganaTower();
 
-   // void levelup();
+   virtual void upgrade() ;
 
 protected slots:
     virtual void startShooting();

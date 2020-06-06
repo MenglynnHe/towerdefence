@@ -4,7 +4,7 @@
 const QSize Bullet::fixedSize(8, 8);
 
 Bullet::Bullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target,
-              Scene *game, const QPixmap &icon)
+              Scene *game,qreal slow, const QPixmap &icon)
     : startPos(startPos)//子弹开始的位置
     , targetPos(targetPoint)//目标的位置
     , icon(icon)
@@ -12,6 +12,8 @@ Bullet::Bullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target,
     , target(target)
     , game(game)//游戏中
     , damage(damage)//子弹伤害
+    , bulletKind(0)
+    , slow_speed(slow)
 {//qDebug()<<"bullet icon"<<endl;
 }
 Bullet ::~ Bullet(){}
@@ -43,7 +45,7 @@ void Bullet::hitTarget()
     // 后续炮弹再攻击到的敌人就是无效内存区域
     // 因此先判断下敌人是否还有效
     if (game->enemyList().indexOf(target) != -1)
-        target->getDamage(damage);
+        target->getDamage(this);
     game->removedBullet(this);
 }
 
@@ -56,20 +58,20 @@ QPoint Bullet::currentPos() const
 {
     return current_Pos;
 }
-AsheBullet::AsheBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, Scene *game, const QPixmap &sprite)
-    :Bullet(startPos, targetPoint, damage, target, game,sprite)
+AsheBullet::AsheBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, Scene *game, qreal slow,const QPixmap &sprite)
+    :Bullet(startPos, targetPoint, damage, target, game,slow,sprite)
 {
 
 }
 
 TrisBullet::TrisBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, Scene *game,  const QPixmap &sprite)
-    :Bullet(startPos, targetPoint, damage, target, game, sprite)
+    :Bullet(startPos, targetPoint, damage, target, game,1, sprite)
 {
-
+    bulletKind=1;
 }
 
 MorganaBullet::MorganaBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, Scene *game,  const QPixmap &sprite)
-    :Bullet(startPos, targetPoint, damage, target, game, sprite)
+    :Bullet(startPos, targetPoint, damage, target, game,1,sprite)
 {
-
+    bulletKind=2;
 }

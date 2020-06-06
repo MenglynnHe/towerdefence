@@ -31,5 +31,7 @@
         <file>bullet/Morganabullet.png</file>
         <file>tower/mogana.png</file>
         <file>picture/statebar.png</file>
+        <file>picture/upgrade.png</file>
+        <file>picture/attribute.png</file>
     </qresource>
 </RCC>

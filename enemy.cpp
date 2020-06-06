@@ -11,7 +11,7 @@ Enemy::Enemy(TravelPath *nowPoint, Scene*game, const QPixmap &icon )
     , ifFree(false)//初始空闲
     , m_maxHp(40)
     , m_walkingSpeed(2.0)
-    , m_rotationSprite(0.0)
+   // , m_rotationSprite(0.0)
     , pos1(nowPoint->get_pos())//坐标赋值
     , targetPathPoint(nowPoint->get_nextTravelPoint())//目标点就是航点列表中的下一个点
     , game(game)
@@ -19,15 +19,23 @@ Enemy::Enemy(TravelPath *nowPoint, Scene*game, const QPixmap &icon )
     , size(0,0)
     ,damage(true)
     ,award(50)
-{origionlife=80;
- life=80;
+    ,ice(0)
+    ,apdamage(0)
+    ,m_normalSpeed(2.0)
+    ,m_slowSpeed(2.0)
+
+{
+    origionlife=80;
+    life=80;
+    blood = new BloodBar(this,game);
 }
 
 Enemy::~Enemy()
 {
-   // attackedTowersList.clear();
+    attackTowersList.clear();
     targetPathPoint = NULL;
     game = NULL;
+    blood= NULL;
 }
 
 void Enemy::setFree()
@@ -49,7 +57,7 @@ void Enemy::setFree()
     // 绘制偏转坐标,由中心+偏移=左上
     static const QPoint offsetPoint(-fixedSize.width() / 2, -fixedSize.height() / 2);
     painter->translate(pos1+size); //这里将坐标原点移到m_pos
-    painter->rotate(m_rotationSprite);
+   // painter->rotate(m_rotationSprite);
 
     // 绘制敌人
     painter->drawPixmap(offsetPoint, icon);
@@ -77,7 +85,8 @@ void Enemy::move()
             // 表示进入基地
            // game->baselife--;
             game->getbaselife();
-            game->removedEnemy(this);
+            getRemoved();
+
           //  game->removedBlood();
            // game->bloodbarList.removeOne();
             return;
@@ -107,27 +116,44 @@ void Enemy::getAttacked(Tower *attacker)
 }
 void Enemy::getRemoved()
 {
-    if (attackTowersList.empty())
-        return;
-
+    if (!attackTowersList.empty())
     foreach (Tower *attacker, attackTowersList)
         attacker->targetKilled();
     // 通知game,此敌人已经阵亡
+
     game->removedEnemy(this);
 
 }
 
-void Enemy::getDamage(int damage)
+void Enemy::getDamage(Bullet *bullet)
 {
-   life -= damage;
+   life -= bullet->damage;
 
     // 阵亡,需要移除
     if (life <= 0)
        {
+        qDebug()<<"kill one*******"<<endl;
         game->awardMoney(award);//击杀敌人奖励金钱
         game->getkilled_enemies();//不能确定是不是这里有问题
       //  qDebug()<<"killed ene"<<game->killed_enemies<<endl;
         getRemoved();
+    }
+    switch(bullet->bulletKind)
+    {
+        case 0://ashe
+        ice = iceLevel;
+        m_slowSpeed=m_normalSpeed* bullet->slow_speed;
+        m_walkingSpeed =m_slowSpeed;//速度更新为slowspeed
+            break;
+        case 1://tris
+
+            break;
+        case 2://mor
+       // apdamage=apLevel;
+
+      //   m_walkingSpeed = 0.0;
+            break;
+
     }
 }
 
@@ -135,44 +161,37 @@ void Enemy::getDamage(int damage)
 DogFace1::DogFace1(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
     :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
 {
-    //this->fireLevel=15;
-   // this->iceLevel=15;
-   // this->HPdamage=1;
+
 
     this->pos1=startWayPoint->get_pos();
     this->origionlife=120;//增加血量
     this->life=120;
     this->award=70;
     this->targetPathPoint=startWayPoint->get_nextTravelPoint();
+    this->iceLevel=15;
+    this->apLevel=8;
 
 }
 Wind::Wind(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy2.png")*/)
     :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy2.png")*/)
 {
-   // this->enemyKind=2;
-  //  this->award=250;
-   // this->m_maxHp = 75;
     this->origionlife=150;
     this->life=150;
-  //  this->m_currentHp = 75;
-  //  this->antiSlowspeed=2.0;
+
     this-> m_walkingSpeed=1.8;
-   // this->fireLevel=20;
-   // this->iceLevel=10;
-   // this->HPdamage=1;
-    this->m_rotationSprite = 0.0;
+
     this->pos1=startWayPoint->get_pos();
     this->size=QPoint(-114/2,-86/2);
     this->award=150;
     this->targetPathPoint=startWayPoint->get_nextTravelPoint();
+    this->iceLevel=0;
+    this->apLevel=0;
 }
 
 Nashor::Nashor(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
     :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
 {
-    //this->fireLevel=15;
-   // this->iceLevel=15;
-   // this->HPdamage=1;
+
     this->award=300;
     this->pos1=startWayPoint->get_pos();
     this->origionlife=200;//增加血量
@@ -180,15 +199,14 @@ Nashor::Nashor(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* =
     this->m_walkingSpeed=1.0;
     this->size=QPoint(-60/2,-180/2);
     this->targetPathPoint=startWayPoint->get_nextTravelPoint();
+    this->iceLevel=0;
+    this->apLevel=0;
 }
 
 Draven::Draven(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
     :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
 {
     this->award=320;
-    //this->fireLevel=15;
-   // this->iceLevel=15;
-   // this->HPdamage=1;
 
     this->pos1=startWayPoint->get_pos();
     this->size=QPoint(-80/2,-104/2);
@@ -196,6 +214,8 @@ Draven::Draven(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* =
     this->life=140;
     this->m_walkingSpeed=2.6;
     this->targetPathPoint=startWayPoint->get_nextTravelPoint();
+    this->iceLevel=10;
+    this->apLevel=8;
 }
 
 Yasuo::Yasuo(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
@@ -211,4 +231,6 @@ Yasuo::Yasuo(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = Q
     this->size=QPoint(-138/2,-76/2);
     this->m_walkingSpeed=4.0;
     this->targetPathPoint=startWayPoint->get_nextTravelPoint();
+    this->iceLevel=10;
+    this->apLevel=8;
 }

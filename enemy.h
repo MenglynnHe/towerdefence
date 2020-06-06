@@ -6,8 +6,10 @@
 #include "scene.h"
 #include <QSize>
 #include"bloodbar.h"
+#include "bullet.h"
 class Scene;
 class Tower;
+class Bullet;
 class Enemy : public QObject
 {
     Q_OBJECT
@@ -20,7 +22,8 @@ public:
 
     void draw(QPainter *painter) const;
     void move();
-    void getDamage(int damage);
+
+    void getDamage(Bullet *bullet);
     void getRemoved();
     int getLife() {return life;}  //生命长度
     int getOriginalLife()  {return origionlife;}
@@ -31,6 +34,16 @@ public:
     void removedBlood(BloodBar *blood);
     bool isChosen=0;
     bool			ifFree;//判断敌人是否空闲
+
+    int             ice; //
+    int             iceLevel;//减速效果持续时间
+    int             apdamage;
+    int             apLevel;//魔法伤害效果持续时间
+    qreal           m_slowSpeed; //寒冰状态的速度
+    qreal           m_normalSpeed; //正常状态的速度
+    qreal			m_walkingSpeed;
+    BloodBar *       blood;
+ //   qreal			m_rotationSprite;
 public slots:
     void setFree();
     void setischosen(bool b){isChosen=b;}
@@ -40,8 +53,7 @@ protected:
     int				m_maxHp;
     //int				m_currentHp;
     int             life;
-    qreal			m_walkingSpeed;
-    qreal			m_rotationSprite;
+
     int             origionlife;//初始生命值
     QPoint			pos1;
     TravelPath *    targetPathPoint;//要去的目的地
@@ -52,6 +64,7 @@ protected:
 
     const QPixmap	icon;
     static const QSize fixedSize;//固定敌人的尺寸
+
 
 
 signals:

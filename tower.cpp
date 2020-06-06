@@ -10,6 +10,7 @@ Tower::Tower(QPoint pos,Scene * game, const QPixmap &sprite):
     , icon(sprite)
     , game(game)
     , attackRate(1000)
+    , m_level(1)
 {    choosed_enemy=nullptr;
     attackTimer = new QTimer(this);
     connect(attackTimer, SIGNAL(timeout()), this, SLOT(startShooting()));//每隔一定时间就开始攻击
@@ -35,6 +36,9 @@ void Tower::draw(QPainter *painter) const
     painter->drawPixmap(offsetPoint, icon);//从回到左上角开始画塔的图片
    // qDebug()<<offsetPoint<<endl;
     painter->restore();//画家还原位置
+}
+void Tower::drawelli(QPainter *painter) const{
+    painter->drawEllipse(pos, attackRange, attackRange);
 }
 
 void Tower::checkEnemyInRange()
@@ -106,7 +110,9 @@ void Tower::forgiveEnemy()
 AsheTower::AsheTower(QPoint pos, Scene * game, const QPixmap &sprite)
     : Tower(pos, game, sprite)
 {
-
+    kind=0;
+   // attackRate=100;
+    toslow=1.0;
 }
 
 AsheTower::~AsheTower()
@@ -115,14 +121,28 @@ AsheTower::~AsheTower()
 }
 void AsheTower::startShooting()
 {
-    Bullet *bullet = new AsheBullet(pos, choosed_enemy->getpos(), damage, choosed_enemy, game);
+    Bullet *bullet = new AsheBullet(pos, choosed_enemy->getpos(), damage, choosed_enemy, game,toslow);
     bullet->move();
     game->addBullet(bullet);
+}
+void AsheTower::upgrade(){
+    if (m_level == 18) //5级为最高级
+        return;
+    m_level+=3;
+ //   damage += 5; //每升一个单位级子弹加5点伤害
+    attackRate-=100;//攻速加快100
+    //减速功能
+ //     drawelli(QPainter *painter);
+    toslow-=0.12;//每升一级攻速减0.12百分比
+
 }
 TristanaTower::TristanaTower(QPoint pos, Scene * game, const QPixmap &sprite)
     : Tower(pos, game, sprite)
 {
-attackRange=150;
+    attackRange=150;
+    kind=1;
+
+
 }
 
 TristanaTower::~TristanaTower()
@@ -135,12 +155,21 @@ void TristanaTower::startShooting()
     bullet->move();
     game->addBullet(bullet);
 }
+void TristanaTower::upgrade(){
 
+        if (m_level == 18) //5级为最高级
+            return;
+        m_level+=3;
+        damage += 5; //每升一级子弹加5点伤害
+        attackRange+=5;//攻击范围
+        attackRate-=100;//攻速加快100
+}
 
 MorganaTower::MorganaTower(QPoint pos, Scene * game, const QPixmap &sprite)
     : Tower(pos, game, sprite)
 {
-attackRange=120;
+    kind=2;
+    attackRange=120;
 }
 
 MorganaTower::~MorganaTower()
@@ -152,4 +181,13 @@ void MorganaTower::startShooting()
     Bullet *bullet = new MorganaBullet(pos, choosed_enemy->getpos(), damage, choosed_enemy, game);
     bullet->move();
     game->addBullet(bullet);
+}
+void MorganaTower::upgrade(){
+
+        if (m_level == 18) //5级为最高级
+            return;
+        m_level+=3;
+        damage += 5; //每升一级子弹加5点伤害
+       //能不能实现控敌人一段时间
+        attackRange+=5;
 }

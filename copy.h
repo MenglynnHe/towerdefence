@@ -9,7 +9,7 @@ class Copy : public QLabel
 {
 public:
     Copy(QLabel * parent =0);
-    ~Copy();
+     ~Copy();
 };
 
 class AsheTowerCopy :public Copy
