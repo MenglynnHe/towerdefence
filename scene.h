@@ -111,14 +111,32 @@ private:
      MyPushButton *exit=new MyPushButton(":/picture/u=3817788749,2795166190&fm=26&gp=0.jpg");
 
 signals:
-     void  toPlay();
+     void toPlay();
+     void toTitle();
+
 public slots:
     void updateMap();
     void gameStart();
     void MorIceattack();//攻击效果实现，只有Mor控制效果和ashe的减速效果
+
 };
 
+//选择关卡
+class ChoiceScene : public QLabel
+{
+    Q_OBJECT
+public:
+    explicit ChoiceScene(QWidget* parent = 0);
+    ~ChoiceScene();
 
+private:
+    QMovie* background = new QMovie(":/picture/choicescene.png");
+    Scene * scene=nullptr;
+
+public slots:
+    void play();//开始游戏
+
+};
 
 
 

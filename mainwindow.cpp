@@ -29,7 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
     startbtn->downbounce();
     //延时500秒触发
     QTimer::singleShot(500,this,[=](){
-    play();
+
+    choice();
     });
 
     });
@@ -57,10 +58,12 @@ void MainWindow::paintEvent(QPaintEvent *){
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete choices;
 }
-void MainWindow::play(){
+void MainWindow::choice(){
 
-    scene= new Scene(this);
+    choices = new ChoiceScene(this);
+
 }
 
 

@@ -253,6 +253,18 @@ void Scene::mousePressEvent(QMouseEvent *event)
                     attributeBar->show();
                     attributeBar->setPixmap(QPixmap(":/picture/attribute.png"));
                     }
+                    else if(towerkind==1)
+                  { attributeBar->setGeometry(270,529,239,109);
+                    attributeBarPic->start();
+                    attributeBar->show();
+                    attributeBar->setPixmap(QPixmap(":/picture/attribute3.png"));
+                    }
+                    else if(towerkind==2)
+                  { attributeBar->setGeometry(270,529,239,109);
+                    attributeBarPic->start();
+                    attributeBar->show();
+                    attributeBar->setPixmap(QPixmap(":/picture/attribute2.png"));
+                    }
 
 
                     Level->setText(QString("%1").arg(it->m_tower->m_level));
@@ -320,6 +332,19 @@ void Scene::mousePressEvent(QMouseEvent *event)
                   currenttower->upgrade();//塔升级要增强相关属性
 
                  // stateBar(currenttower);
+                  Level->setText(QString("%1").arg(currenttower->m_level));
+                  Level->show();
+                  Level->raise();
+
+
+
+                  attack->setText(QString("%1").arg(currenttower->returnAttack()));
+                  attack->show();
+                  attack->raise();
+
+                  attackRate->setText(QString("%1").arg(currenttower->getRate()));
+                  attackRate->show();
+                  attackRate->raise();
               }
 
           }
@@ -334,6 +359,19 @@ void Scene::mousePressEvent(QMouseEvent *event)
                   haveMoney -= gold;
                   currenttower->upgrade();//塔升级要增强相关属性
                 //  stateBar(currenttower);
+                  Level->setText(QString("%1").arg(currenttower->m_level));
+                  Level->show();
+                  Level->raise();
+
+
+
+                  attack->setText(QString("%1").arg(currenttower->returnAttack()));
+                  attack->show();
+                  attack->raise();
+
+                  attackRate->setText(QString("%1").arg(currenttower->getRate()));
+                  attackRate->show();
+                  attackRate->raise();
               }
 
           }
@@ -871,16 +909,69 @@ void Scene::dogameover()
     {
         gameEnded = true;}
 }
-void Scene::stateBar(Tower * nowtower){
-    Level->setText(QString("%1").arg(nowtower->m_level));
-    Level->show();
-    Level->raise();
 
-    attack->setText(QString("%1").arg(nowtower->returnAttack()));
-    attack->show();
-    attack->raise();
+ChoiceScene::ChoiceScene(QWidget* parent):QLabel(parent)
+{
 
-    attackRate->setText(QString("%1").arg(nowtower->getRate()));
-    attackRate->show();
-    attackRate->raise();
+
+//    QUrl backgroundMusicUrl = QUrl::fromLocalFile(s_curDir + "/First Page.mp3");
+//    m_audioPlayer = new AudioPlayer(backgroundMusicUrl,this);
+//    m_audioPlayer->startBGM();
+    this->setMouseTracking(true);
+    this->grabKeyboard();
+    this->setGeometry(0, 0, 1200, 639);//多大
+    this->setMovie(this->background);
+    this->background->start();
+    this->show();
+
+    MyPushButton *choicebtn1=new MyPushButton(":/picture/choice1.png");
+    MyPushButton *choicebtn2=new MyPushButton(":/picture/choice2.png");
+    choicebtn1->setParent(this);//放在当前窗口下
+    choicebtn2->setParent(this);
+    choicebtn1->move(191,100);
+    choicebtn2->move(800,100);
+//canyon
+    connect(choicebtn1,&MyPushButton::clicked,[=](){
+
+    choicebtn1->upbounce();
+    choicebtn1->downbounce();
+ //延时500秒触发
+    QTimer::singleShot(500,this,[=](){
+    play();
+    });
+    });
+//polar
+    connect(choicebtn2,&MyPushButton::clicked,[=](){
+
+    choicebtn2->upbounce();
+    choicebtn2->downbounce();
+  //延时500秒触发
+    QTimer::singleShot(500,this,[=](){
+    play();
+    });
+    });
+
+    choicebtn1->setFlat(true);
+    choicebtn1->setIconSize(QSize(209,209));
+    choicebtn1->setStyleSheet("background: transparent");
+    choicebtn1->setCursor(Qt::PointingHandCursor);
+    choicebtn1->show();
+    choicebtn1->raise();
+
+    choicebtn2->setFlat(true);
+    choicebtn2->setIconSize(QSize(209,209));
+    choicebtn2->setStyleSheet("background: transparent");
+    choicebtn2->setCursor(Qt::PointingHandCursor);
+    choicebtn2->show();
+    choicebtn2->raise();
+
+}
+ChoiceScene::~ChoiceScene()
+{
+    delete this->background;
+    delete this->scene;
+}
+
+void ChoiceScene::play(){
+    scene= new Scene(this);
 }

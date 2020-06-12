@@ -18,15 +18,15 @@ public:
     ~MainWindow();
     void paintEvent(QPaintEvent *);
 
-    Scene * scene=nullptr;
+
 
 
 
 private:
     Ui::MainWindow *ui;
-
+    ChoiceScene * choices=nullptr;
 public slots:
-   void play();//开始游戏
+   void choice();//选择关卡
 };
 
 #endif // MAINWINDOW_H
