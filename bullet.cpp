@@ -4,7 +4,7 @@
 const QSize Bullet::fixedSize(8, 8);
 
 Bullet::Bullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target,
-              Scene *game,qreal slow, const QPixmap &icon)
+              BaseScene *game,qreal slow, const QPixmap &icon)
     : startPos(startPos)//子弹开始的位置
     , targetPos(targetPoint)//目标的位置
     , icon(icon)
@@ -58,19 +58,19 @@ QPoint Bullet::currentPos() const
 {
     return current_Pos;
 }
-AsheBullet::AsheBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, Scene *game, qreal slow,const QPixmap &sprite)
+AsheBullet::AsheBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, qreal slow,const QPixmap &sprite)
     :Bullet(startPos, targetPoint, damage, target, game,slow,sprite)
 {
 
 }
 
-TrisBullet::TrisBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, Scene *game,  const QPixmap &sprite)
+TrisBullet::TrisBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game,  const QPixmap &sprite)
     :Bullet(startPos, targetPoint, damage, target, game,1, sprite)
 {
     bulletKind=1;
 }
 
-MorganaBullet::MorganaBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, Scene *game,  const QPixmap &sprite)
+MorganaBullet::MorganaBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game,  const QPixmap &sprite)
     :Bullet(startPos, targetPoint, damage, target, game,1,sprite)
 {
     bulletKind=2;

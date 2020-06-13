@@ -14,7 +14,7 @@ class Bullet :public QObject
 
 public:
     Bullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target,
-           Scene *game, qreal slow = 1,const QPixmap &icon= QPixmap(":/bullet/bulletcopy.png"));
+           BaseScene *game, qreal slow = 1,const QPixmap &icon= QPixmap(":/bullet/bulletcopy.png"));
 
     void draw(QPainter *painter) const;
     void move();
@@ -35,7 +35,7 @@ private:
     const QPixmap	icon;
     QPoint			current_Pos;
     Enemy *			target;
-    Scene *	        game;
+    BaseScene *	        game;
 
 
     static const QSize fixedSize;
@@ -44,7 +44,7 @@ class AsheBullet: public Bullet{
     Q_OBJECT
 
 public:
-    AsheBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, Scene *game, qreal slow = 1.0,const QPixmap &sprite = QPixmap(":/bullet/ashebullet.png"));
+    AsheBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, qreal slow = 1.0,const QPixmap &sprite = QPixmap(":/bullet/ashebullet.png"));
 
 };
 class TrisBullet: public Bullet
@@ -52,7 +52,7 @@ class TrisBullet: public Bullet
     Q_OBJECT
 
 public:
-    TrisBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, Scene *game, const QPixmap &sprite = QPixmap(":/picture/bullet/trisbullet1.png"));
+    TrisBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, const QPixmap &sprite = QPixmap(":/picture/bullet/trisbullet1.png"));
 };
 
 class MorganaBullet: public Bullet
@@ -60,7 +60,7 @@ class MorganaBullet: public Bullet
     Q_OBJECT
 
 public:
-    MorganaBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, Scene *game, const QPixmap &sprite = QPixmap(":/bullet/Morganabullet.png"));
+    MorganaBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, const QPixmap &sprite = QPixmap(":/bullet/Morganabullet.png"));
 };
 
 #endif // BULLET_H

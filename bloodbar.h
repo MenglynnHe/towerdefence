@@ -5,12 +5,12 @@
 #include <QProgressBar>
 #include "enemy.h"
 class Enemy;
-class Scene;
+class BaseScene;
 class BloodBar : public QProgressBar
 {
     Q_OBJECT
 public:
-    BloodBar(Enemy * parent,Scene *game);
+    BloodBar(Enemy * parent,BaseScene *game);
     void draw(QPainter *p);
     void getremoved();
     ~BloodBar();
@@ -23,7 +23,7 @@ private:
     double k;
     int x;
     QRect fillRect;
-    Scene*	        game;
+    BaseScene*	        game;
     QString valueStr;
     QPixmap buttomMap;
     QPixmap fillMap;

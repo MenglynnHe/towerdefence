@@ -3,7 +3,7 @@
 #include "QDebug"
 #include "bullet.h"
 const QSize Tower::ms_fixedSize(70, 70);
-Tower::Tower(QPoint pos,Scene * game, const QPixmap &sprite):
+Tower::Tower(QPoint pos,BaseScene * game, const QPixmap &sprite):
      attackRange(180)
     , damage(10)
     , pos(pos)
@@ -107,7 +107,7 @@ void Tower::forgiveEnemy()
     attackTimer->stop();
     rotationIcon = 0.0;
 }
-AsheTower::AsheTower(QPoint pos, Scene * game, const QPixmap &sprite)
+AsheTower::AsheTower(QPoint pos, BaseScene * game, const QPixmap &sprite)
     : Tower(pos, game, sprite)
 {
     kind=0;
@@ -136,7 +136,7 @@ void AsheTower::upgrade(){
     toslow-=0.12;//每升一级攻速减0.12百分比
 
 }
-TristanaTower::TristanaTower(QPoint pos, Scene * game, const QPixmap &sprite)
+TristanaTower::TristanaTower(QPoint pos, BaseScene * game, const QPixmap &sprite)
     : Tower(pos, game, sprite)
 {
     attackRange=150;
@@ -165,7 +165,7 @@ void TristanaTower::upgrade(){
         attackRate-=100;//攻速加快100
 }
 
-MorganaTower::MorganaTower(QPoint pos, Scene * game, const QPixmap &sprite)
+MorganaTower::MorganaTower(QPoint pos, BaseScene * game, const QPixmap &sprite)
     : Tower(pos, game, sprite)
 {
     kind=2;

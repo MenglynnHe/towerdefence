@@ -37,6 +37,7 @@
         <file>picture/attribute3.png</file>
         <file>picture/choice1.png</file>
         <file>picture/choice2.png</file>
+        <file>picture/1.png</file>
         <file>picture/choicescene.png</file>
     </qresource>
 </RCC>

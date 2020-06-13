@@ -1,7 +1,7 @@
 #include "bloodbar.h"
 #include <QPainter>
 #include "QDebug"
-BloodBar::BloodBar(Enemy *parent,Scene *game):
+BloodBar::BloodBar(Enemy *parent,BaseScene *game):
     parent(nullptr)
 {   this->game=game;
     this->parent=parent;

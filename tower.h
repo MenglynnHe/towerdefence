@@ -7,6 +7,7 @@
 #include"QTimer"
 #include "enemy.h"
 class Enemy;
+class BaseScene;
 //碰撞检测
 inline bool if_collision_inCircle(QPoint point1, int radius1, QPoint point2, int radius2)
 {
@@ -19,13 +20,13 @@ inline bool if_collision_inCircle(QPoint point1, int radius1, QPoint point2, int
 }
 
 
-class Scene;
+
 class Tower : public QObject
 {
     Q_OBJECT
 public:
     //Tower(QObject *parent = nullptr);
-    Tower(QPoint pos,Scene * game,const   QPixmap &sprite= QPixmap(":/picture/towerashe.png") );
+    Tower(QPoint pos,BaseScene * game,const   QPixmap &sprite= QPixmap(":/picture/towerashe.png") );
     ~Tower();
     virtual void draw(QPainter *painter) const;//画塔
     void drawelli(QPainter *painter) const;
@@ -57,7 +58,7 @@ protected:
 
     const QPoint	pos; //塔的圆心
     const QPixmap	icon; //塔的图片
-    Scene *         game;
+    BaseScene *         game;
     QTimer *		attackTimer;
     Enemy *         choosed_enemy;//敌人的选择
     static const QSize ms_fixedSize;
@@ -73,7 +74,7 @@ class AsheTower: public Tower
 {
     Q_OBJECT
 public:
-    AsheTower(QPoint pos, Scene * game, const QPixmap &sprite = QPixmap(":/picture/towerashe.png"));
+    AsheTower(QPoint pos, BaseScene * game, const QPixmap &sprite = QPixmap(":/picture/towerashe.png"));
     ~AsheTower();
     virtual void upgrade() ;
 
@@ -89,7 +90,7 @@ class TristanaTower: public Tower
 {
     Q_OBJECT
 public:
-   TristanaTower(QPoint pos, Scene * game, const QPixmap &sprite = QPixmap(":/picture/tristower.png"));
+   TristanaTower(QPoint pos, BaseScene * game, const QPixmap &sprite = QPixmap(":/picture/tristower.png"));
     ~TristanaTower();
 
     virtual void upgrade() ;
@@ -102,7 +103,7 @@ class MorganaTower: public Tower
 {
     Q_OBJECT
 public:
-   MorganaTower(QPoint pos, Scene * game, const QPixmap &sprite = QPixmap(":/picture/Morgana.png"));
+   MorganaTower(QPoint pos, BaseScene * game, const QPixmap &sprite = QPixmap(":/picture/Morgana.png"));
     ~MorganaTower();
 
    virtual void upgrade() ;

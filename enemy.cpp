@@ -6,14 +6,14 @@
 #include "bloodbar.h"
 const QSize Enemy::fixedSize(40, 40);
 
-Enemy::Enemy(TravelPath *nowPoint, Scene*game, const QPixmap &icon )
+Enemy::Enemy(TravelPath *nowPoint, BaseScene*game, const QPixmap &icon )
     : QObject(0)
     , ifFree(false)//初始空闲
     , m_maxHp(40)
     , m_walkingSpeed(2.0)
    // , m_rotationSprite(0.0)
     , pos1(nowPoint->get_pos())//坐标赋值
-    , targetPathPoint(nowPoint->get_nextTravelPoint())//目标点就是航点列表中的下一个点
+  //  , targetPathPoint(nowPoint->get_nextTravelPoint())//目标点就是航点列表中的下一个点
     , game(game)
     , icon(icon)
     , size(0,0)
@@ -28,6 +28,8 @@ Enemy::Enemy(TravelPath *nowPoint, Scene*game, const QPixmap &icon )
     origionlife=80;
     life=80;
     blood = new BloodBar(this,game);
+ //    qDebug()<<"ok to create an base enemy"<<endl;
+     targetPathPoint=nowPoint->get_nextTravelPoint();
 }
 
 Enemy::~Enemy()
@@ -41,7 +43,9 @@ Enemy::~Enemy()
 void Enemy::setFree()
 {
     ifFree = true;
+ //   qDebug()<<"ok to setfree"<<endl;
 }
+
 
 
  void Enemy::draw(QPainter *painter) const
@@ -62,6 +66,7 @@ void Enemy::setFree()
     // 绘制敌人
     painter->drawPixmap(offsetPoint, icon);
     painter->restore();
+//    qDebug()<<"ok to draw an enemy"<<endl;
 }
 
 
@@ -69,16 +74,20 @@ void Enemy::setFree()
 void Enemy::move()
 {
     if (!ifFree)
-        return;
-
+    {
+        //qDebug()<<"ok to iffree"<<endl;
+        return;}
+//qDebug()<<"ok to move999"<<endl;
+//qDebug()<<"ok to !11"<<targetPathPoint->get_pos()<<endl;
     if (if_collision_inCircle(pos1, 1, targetPathPoint->get_pos(), 1))// 敌人抵达了一个航点
     {
-
+//qDebug()<<"ok to move1"<<endl;
         if (targetPathPoint->get_nextTravelPoint())// 如果还存在下一个点
         {
-
+//qDebug()<<"ok to move2"<<endl;
             pos1 = targetPathPoint->get_pos();//修改当前到达的位置，即到达了一个航点
             targetPathPoint = targetPathPoint->get_nextTravelPoint();//更新目标航点
+//qDebug()<<"ok to move3"<<endl;
         }
         else
         {
@@ -86,16 +95,17 @@ void Enemy::move()
            // game->baselife--;
             game->getbaselife();
             getRemoved();
-
+//qDebug()<<"ok to move4"<<endl;
           //  game->removedBlood();
            // game->bloodbarList.removeOne();
             return;
         }
     }
-
+//qDebug()<<"ok to **********"<<endl;
     // 还在前往航点的路上
     // 目标航点的坐标
     QPoint targetPoint = targetPathPoint->get_pos();
+ //   qDebug()<<"ok to move5"<<endl;
     // 未来修改这个可以添加移动状态,加快,减慢,m_walkingSpeed是基准值
 
     // 向量标准化(整不明白）
@@ -116,6 +126,7 @@ void Enemy::getAttacked(Tower *attacker)
 }
 void Enemy::getRemoved()
 {
+ //   qDebug()<<"ok to getremoved enmey"<<endl;
     if (!attackTowersList.empty())
     foreach (Tower *attacker, attackTowersList)
         attacker->targetKilled();
@@ -132,10 +143,10 @@ void Enemy::getDamage(Bullet *bullet)
     // 阵亡,需要移除
     if (life <= 0)
        {
-        qDebug()<<"kill one*******"<<endl;
+  //      qDebug()<<"kill one*******"<<endl;
         game->awardMoney(award);//击杀敌人奖励金钱
         game->getkilled_enemies();//不能确定是不是这里有问题
-      //  qDebug()<<"killed ene"<<game->killed_enemies<<endl;
+ //   qDebug()<<"killed ene"<<game->killed_enemies<<endl;
         getRemoved();
     }
     switch(bullet->bulletKind)
@@ -146,19 +157,16 @@ void Enemy::getDamage(Bullet *bullet)
         m_walkingSpeed =m_slowSpeed;//速度更新为slowspeed
             break;
         case 1://tris
-
             break;
         case 2://mor
        // apdamage=apLevel;
-
       //   m_walkingSpeed = 0.0;
-            break;
-
+        break;
     }
 }
 
 
-DogFace1::DogFace1(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
+DogFace1::DogFace1(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
     :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
 {
 
@@ -172,7 +180,21 @@ DogFace1::DogFace1(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite
     this->apLevel=8;
 
 }
-Wind::Wind(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy2.png")*/)
+DogFace2::DogFace2(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
+    :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
+{
+
+
+    this->pos1=startWayPoint->get_pos();
+    this->origionlife=120;//增加血量
+    this->life=120;
+    this->award=70;
+    this->targetPathPoint=startWayPoint->get_nextTravelPoint();
+    this->iceLevel=15;
+    this->apLevel=8;
+
+}
+Wind::Wind(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy2.png")*/)
     :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy2.png")*/)
 {
     this->origionlife=150;
@@ -188,7 +210,7 @@ Wind::Wind(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPi
     this->apLevel=0;
 }
 
-Nashor::Nashor(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
+Nashor::Nashor(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
     :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
 {
 
@@ -203,7 +225,7 @@ Nashor::Nashor(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* =
     this->apLevel=0;
 }
 
-Draven::Draven(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
+Draven::Draven(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
     :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
 {
     this->award=320;
@@ -216,9 +238,10 @@ Draven::Draven(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* =
     this->targetPathPoint=startWayPoint->get_nextTravelPoint();
     this->iceLevel=10;
     this->apLevel=8;
+ //   qDebug()<<"ok to create an draven enemy!!"<<endl;
 }
 
-Yasuo::Yasuo(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
+Yasuo::Yasuo(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
     :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
 {
     this->award=320;

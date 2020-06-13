@@ -3,11 +3,11 @@
 
 #include <QObject>
 #include "travelpath.h"
-#include "scene.h"
+#include "Scene.h"
 #include <QSize>
 #include"bloodbar.h"
 #include "bullet.h"
-class Scene;
+class BaseScene;
 class Tower;
 class Bullet;
 class Enemy : public QObject
@@ -16,9 +16,9 @@ class Enemy : public QObject
 
 
 public:
-    //当前敌人前进的位置-nowPoint,在scene场景中玩游戏，敌人的形象icon
-    Enemy(TravelPath *nowPoint, Scene*game, const QPixmap &icon = QPixmap(":/enemy/dogface.png"));
-    ~Enemy();
+    //当前敌人前进的位置-nowPoint,在BaseScene场景中玩游戏，敌人的形象icon
+    Enemy(TravelPath *nowPoint, BaseScene*game, const QPixmap &icon = QPixmap(":/enemy/dogface.png"));
+    virtual ~Enemy();
 
     void draw(QPainter *painter) const;
     void move();
@@ -58,7 +58,7 @@ protected:
     QPoint			pos1;
     TravelPath *    targetPathPoint;//要去的目的地
     QPoint          size;
-    Scene*	        game;
+    BaseScene*	        game;
     int             award;//击杀后可获得的奖励
    // QList<Tower *>	attackedTowersList;
 
@@ -75,29 +75,33 @@ public slots:
 class DogFace1:public Enemy{//血厚
     Q_OBJECT
 public:
-    DogFace1(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite = QPixmap(":/enemy/dogface1.png"));
+    DogFace1(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite = QPixmap(":/enemy/dogface1.png"));
 };
-
+class DogFace2:public Enemy{//血厚
+    Q_OBJECT
+public:
+    DogFace2(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite = QPixmap(":/enemy/enemy2.png"));
+};
 class Wind:public Enemy{//血厚，移速快
     Q_OBJECT
 public:
-    Wind(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite = QPixmap(":/enemy/dragon2.png"));
+    Wind(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite = QPixmap(":/enemy/dragon2.png"));
 };
 
 class Nashor:public Enemy{//血厚，移速慢
     Q_OBJECT
 public:
-    Nashor(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite = QPixmap(":/enemy/dragon1.png"));
+    Nashor(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite = QPixmap(":/enemy/dragon1.png"));
 };
 class Draven:public Enemy{//看着凶猛，血厚，升级功能？
     Q_OBJECT
 public:
-    Draven(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite = QPixmap(":/enemy/draven.png"));
+    Draven(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite = QPixmap(":/enemy/draven.png"));
 };
 
 class Yasuo:public Enemy{//移速快
     Q_OBJECT
 public:
-    Yasuo(TravelPath *startWayPoint, Scene *game, const QPixmap &sprite = QPixmap(":/enemy/yasuo.png"));
+    Yasuo(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite = QPixmap(":/enemy/yasuo.png"));
 };
 #endif // ENEMY_H
