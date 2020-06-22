@@ -19,7 +19,7 @@ BaseScene::BaseScene(QWidget *parent) : QLabel(parent)
   , gameWin(false)
   , baselife(0)
   , killed_enemies(0)
-  , haveMoney(10000)
+  , haveMoney(1000)
 
 {
     this->setMouseTracking(true);
@@ -181,10 +181,6 @@ Scene::~Scene(){
     delete this->lab9;
     delete this->lab10;
     delete this->lab11;
-   // delete this->lab12;
-   // delete this->m_towersList;
-
-
 
 }
 CanyonScene::~CanyonScene(){
@@ -202,49 +198,6 @@ CanyonScene::~CanyonScene(){
     delete this->lab10;
     delete this->lab11;
 
-
-
-//    foreach (Tower *tower, m_towersList)
-//    {
-//        Q_ASSERT(tower);
-//        m_towersList.removeOne(tower);
-//        delete tower;
-//    }
-//    foreach (Enemy *enemy, m_enemyList)
-//    {
-//        Q_ASSERT(enemy);
-//        m_enemyList.removeOne(enemy);
-//        delete enemy;
-//    }
-//    foreach (Bullet *bullet, bulletList)
-//    {
-//        removedBullet(bullet);
-//    }
-//    foreach (TravelPath *path, DF2PointsList)
-//    {
-//        DF2PointsList.removeOne(path);
-//        delete path;
-//    }
-//    foreach (TravelPath *path, YasuoPointsList)
-//    {
-//        YasuoPointsList.removeOne(path);
-//         delete path;
-//    }
-//    foreach (TravelPath *path, EnemyPointsList)
-//    {
-//        EnemyPointsList.removeOne(path);
-//         delete path;
-//    }
-//    foreach (TravelPath *path, NashorPointsList)
-//    {
-//        NashorPointsList.removeOne(path);
-//         delete path;
-//    }
-//    foreach (TravelPath *path, WindPointsList)
-//    {
-//        WindPointsList.removeOne(path);
-//         delete path;
-//    }
 
 }
 void Scene::paintEvent(QPaintEvent *){
@@ -721,12 +674,7 @@ void Scene::mousePressEvent(QMouseEvent *event)
       }
 
 
-//        if (QRect(400, 400, 600,600).contains(event->pos()))//如果鼠标点到了这个矩形区域
-//        {
-//            emit toPlay();
 
-
-//        }
 }
 
 void CanyonScene::mousePressEvent(QMouseEvent *event)
@@ -974,69 +922,57 @@ void Scene::setTowerup(){
     lab1->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab1->setGeometry(230, 150, 70, 70);
     lab1->show();
-    //lab1->setPixmap(QPixmap(":/picture/pic.png"));
     lab1->raise();//把lable放在前面，防止被覆盖
 
     lab2->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab2->setGeometry(800, 320, 70, 70);
     lab2->show();
-   // lab2->setPixmap(QPixmap(":/picture/pic.png"));
     lab2->raise();
 
     lab3->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab3->setGeometry(40, 340, 70, 70);
     lab3->show();
-    //lab3->setPixmap(QPixmap(":/picture/pic.png"));
     lab3->raise();
 
     lab4->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab4->setGeometry(600, 320, 70, 70);//中凸点
     lab4->show();
-   // lab4->setPixmap(QPixmap(":/picture/pic.png"));
     lab4->raise();
 
     lab5->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab5->setGeometry(416, 434, 70, 70);
     lab5->show();
-   // lab5->setPixmap(QPixmap(":/picture/pic.png"));
     lab5->raise();
 
     lab6->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab6->setGeometry(330, 230, 70, 70);
     lab6->show();
-   // lab6->setPixmap(QPixmap(":/picture/pic.png"));
     lab6->raise();
 
     lab7->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
     lab7->setGeometry(455, 120, 70, 70);//中凸点
     lab7->show();
-    //lab7->setPixmap(QPixmap(":/picture/pic.png"));
     lab7->raise();
 
     lab8->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
     lab8->setGeometry(900, 120, 70, 70);
     lab8->show();
-    //lab8->setPixmap(QPixmap(":/picture/pic.png"));
     lab8->raise();
 
     lab9->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
     lab9->setGeometry(960, 316, 70, 70);
     lab9->show();
-  //  lab9->setPixmap(QPixmap(":/picture/pic.png"));
     lab9->raise();
 
     lab10->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
     lab10->setGeometry(730, 117, 70, 70);
     lab10->show();
-   // lab10->setPixmap(QPixmap(":/picture/pic.png"));
     lab10->raise();
 
     lab11->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
     lab11->setGeometry(1140, 200, 70, 70);//中凸点
     lab11->show();
-   // lab11->setPixmap(QPixmap(":/picture/pic.png"));
     lab11->raise();
-
 
    setCopyup();
 
@@ -1145,61 +1081,51 @@ void CanyonScene::setTowerup(){
     lab1->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab1->setGeometry(116, 342, 70, 70);
     lab1->show();
-    //lab1->setPixmap(QPixmap(":/picture/pic.png"));
     lab1->raise();//把lable放在前面，防止被覆盖
 
     lab2->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab2->setGeometry(243, 403, 70, 70);
     lab2->show();
-   // lab2->setPixmap(QPixmap(":/picture/pic.png"));
     lab2->raise();
 
     lab3->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab3->setGeometry(118, 207, 70, 70);
     lab3->show();
-    //lab3->setPixmap(QPixmap(":/picture/pic.png"));
     lab3->raise();
 
     lab4->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab4->setGeometry(326, 257, 70, 70);//中凸点
     lab4->show();
-   // lab4->setPixmap(QPixmap(":/picture/pic.png"));
     lab4->raise();
 
     lab5->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab5->setGeometry(550, 384, 70, 70);
     lab5->show();
-   // lab5->setPixmap(QPixmap(":/picture/pic.png"));
     lab5->raise();
 
     lab6->setStyleSheet("QLabel{border: 1px solid white;} QLabel:hover{border:1px groove #EE0000;}");
     lab6->setGeometry(541, 198, 70, 70);
     lab6->show();
-   // lab6->setPixmap(QPixmap(":/picture/pic.png"));
     lab6->raise();
 
     lab7->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
     lab7->setGeometry(665, 60, 70, 70);//中凸点
     lab7->show();
-    //lab7->setPixmap(QPixmap(":/picture/pic.png"));
     lab7->raise();
 
     lab8->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
     lab8->setGeometry(880, 130, 70, 70);
     lab8->show();
-    //lab8->setPixmap(QPixmap(":/picture/pic.png"));
     lab8->raise();
 
     lab9->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
     lab9->setGeometry(768, 231, 70, 70);
     lab9->show();
-  //  lab9->setPixmap(QPixmap(":/picture/pic.png"));
     lab9->raise();
 
     lab10->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
     lab10->setGeometry(1112, 405, 70, 70);
     lab10->show();
-   // lab10->setPixmap(QPixmap(":/picture/pic.png"));
     lab10->raise();
 
     lab11->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");

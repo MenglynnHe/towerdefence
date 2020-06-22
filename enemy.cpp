@@ -176,6 +176,7 @@ DogFace2::DogFace2(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sp
     this->origionlife=120;//增加血量
     this->life=120;
     this->award=70;
+    this->m_walkingSpeed=1.8;
     this->targetPathPoint=startWayPoint->get_nextTravelPoint();
     this->iceLevel=15;
     this->apLevel=8;
