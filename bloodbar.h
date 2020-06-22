@@ -14,7 +14,7 @@ public:
     void draw(QPainter *p);
     void getremoved();
     ~BloodBar();
-    void check();
+
 private:
     Enemy *parent;
     QRect rect;

@@ -17,8 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
      this->setMouseTracking(true);                 //track mouse when mouse isn`t pressed
     this->setFixedSize(1200, 639);//固定窗口
     //退出
-//    connect(ui->actionquit,&QAction::triggered,[=](){
-//        this->close()});
+
     mainsound->setLoops(-1);
     mainsound->play();
 
@@ -78,14 +77,14 @@ void MainWindow:: choice(){
 }
 
 void MainWindow::back()
-{   qDebug()<<"back"<<endl;
+{
+    qDebug()<<"back"<<endl;
     this->setFixedSize(1200, 639);
     if (scene)
-    {//  qDebug()<<"back1"<<endl;
+    {
         delete scene;
-     //   qDebug()<<"back2"<<endl;
         scene = nullptr;
-     //   qDebug()<<"back3"<<endl;
+
     }
     qDebug()<<"back4"<<endl;
     if (choices)//choices是选择界面

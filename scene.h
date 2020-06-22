@@ -24,7 +24,7 @@ class BaseScene : public QLabel
 {
     Q_OBJECT
 public:
-    Copy* settleCopy=nullptr;//@
+    Copy* settleCopy=nullptr;//选中的copy件
     QPoint currentPos;
     QList<Copy*> towerCopy;
     QPoint pp;//用在mousemovement
@@ -32,7 +32,7 @@ public:
     Tower* currenttower;//@
 
     explicit BaseScene(QWidget *parent = 0);
-   virtual  ~BaseScene();
+    virtual  ~BaseScene();
     void mouseMoveEvent(QMouseEvent *event);
 
 
@@ -60,6 +60,7 @@ public:
     QMovie* statusBarPic = new QMovie(":/thing/picture/statebar.png");
     QLabel* attributeBar = new QLabel(this);
     QMovie* attributeBarPic = new QMovie(":/thing/picture/attribute.png");
+
     QSound* winsound = new QSound(":/AudioConvert/Aatroxvictory.wav",this);
     QSound* defeatsound = new QSound(":/AudioConvert/Aatroxdefeat.wav",this);
     QSound* basesound=nullptr;
@@ -67,15 +68,14 @@ public:
     QSound* startshow =new QSound(":/AudioConvert/showtime_1.wav",this);
     QSound* upgradesound = new QSound(":/AudioConvert/upgrade.wav",this);
     QSound* cantdosound = new QSound(":/AudioConvert/can'tdo.wav",this);
-
+    QSound* enemydie = new QSound("://AudioConvert/enemydie_1_1.wav",this);
     // move to base class
     void addBullet(Bullet *bullet);//@
     virtual void removedEnemy(Enemy *enemy) = 0;//@
     void removedBullet(Bullet *bullet);//@
     void removedBlood(BloodBar *blood);
-    QList<Enemy *> enemyList() const;//@
+
     void awardMoney(int money);//@
- //   void getHpDamage(int damage);
     void getbaselife();
     void getkilled_enemies();
     bool canBuyTower() const;
@@ -84,27 +84,27 @@ public:
     void drawWave();
     void drawbaselife();
     void drawkillednum();//击杀的敌人数
- //   AudioPlayer* audioPlayer() const;
 
+    QList<Enemy *>          enemyList() const;//@
     QList<Bullet *>			bulletList;//@
     QList<Enemy *>			m_enemyList;//@
     QList<BloodBar *>       bloodbarList;
     QList<Tower *>			m_towersList;//@
+
     MyPushButton *exit=new MyPushButton(":/thing/picture/backbtn.png");
     MyPushButton *Continue=new MyPushButton(":/thing/picture/exit2.png");
 
     int						waves;//@
     bool                    gameEnded;//@
     bool                    gameWin;//@
- //   int						m_playerHp;
-    int                     haveMoney;
+    int                     haveMoney;//金钱
     int                     settletower=-1;//默认最开始的塔为-1---ashetower@
     int                     upgradestate = 0;//表示能否升级的状态@
-    int                     towerkind;
-    int                     baselife;
-    int                     killed_enemies;
+    int                     towerkind;//区分塔的种类
+    int                     baselife;//基地被入侵数
+    int                     killed_enemies;//击杀敌人数
 
- //   AudioPlayer *		    m_audioPlayer;
+
 
 signals:
     void toTitle(); //返回信号，返回主界面
@@ -138,8 +138,7 @@ private:
 
 signals:
    void toTitle();
-   void toCanyon();
-   void toPolar();
+
 private slots:
    void onTimer();
    void playPolar();//开始游戏
@@ -160,8 +159,6 @@ public:
     ~Scene();
     void paintEvent(QPaintEvent *);
     void loadTowerPositions();
-
-  //  bool canBuyTower() const;
     bool loadWave();//加载波数
     void setTowerup();//确定塔可以放的位置
     void setCopyup();//设置基塔放置的地方，就是选择塔的地方
@@ -192,8 +189,6 @@ private:
      QList<TowerPosition >    m_towerPositionsList;
      QList<QVariant >			wavesInfo;
 
-   //  QList<TravelPath *>		travelPointList;//航点列表
-
 
 signals:
        leavescene();
@@ -202,7 +197,7 @@ public slots:
     void gameStart();  
     void leave(); // emit toTitle();
 
-   // void back();
+
 
 };
 
@@ -219,17 +214,13 @@ public:
     void loadTowerPositions();//@
 
 
-  //  bool canBuyTower() const;
     bool loadWave();//加载波数@@
     void setTowerup();//确定塔可以放的位置 @@
     void setCopyup();//设置基塔放置的地方，就是选择塔的地方@@
     void mousePressEvent(QMouseEvent * event);//
 
-//    QList<TravelPath *> m_pathPointsList;	// 在paintEvent中需要进行绘制
-
 
     virtual void removedEnemy(Enemy *enemy);//去除enemy@
-
     void preLoadWavesInfo();//@
     QPoint whichtowerPos;//记录你选择的基塔的位置，之后移动基塔后还得放回去
     void stateBar(Tower * nowtower);//用了会异常
@@ -261,19 +252,15 @@ private:
      QList<TravelPath *>    WindPointsList;
      QList<QVariant>			wavesInfo;
 
-   //  QList<TravelPath *>		travelPointList;//航点列表
-
-
 signals:
-//     void toPlay();
-//     void toTitle();
+
      leavescene();
 
 public slots:
     void updateMap();
     void gameStart();
     void leave(); // emit toTitle();
- //   void back();
+
 
 };
 

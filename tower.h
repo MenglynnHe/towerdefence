@@ -26,7 +26,7 @@ class Tower : public QObject
 {
     Q_OBJECT
 public:
-    //Tower(QObject *parent = nullptr);
+
     Tower(QPoint pos,BaseScene * game,const   QPixmap &sprite= QPixmap(":/m/picture/towerashe.png") );
     ~Tower();
     virtual void draw(QPainter *painter) const;//画塔
@@ -51,21 +51,19 @@ public:
 protected:
     int            timerId2;
     bool			attacking;
-//    qreal			rotationIcon;
 
     int				attackRange;	// 代表塔可以攻击到敌人的距离
     int				damage;		// 代表攻击敌人时造成的伤害
     int				attackRate;		// 代表再次攻击敌人的时间间隔
 
-
     const QPoint	pos; //塔的圆心
     const QPixmap	icon; //塔的图片
-    BaseScene *         game;
+    BaseScene *     game;
     QTimer *		attackTimer;
     Enemy *         choosed_enemy;//敌人的选择
     static const QSize ms_fixedSize;
 
-signals:
+
 
 public slots:
     virtual void startShooting()=0;
@@ -80,12 +78,10 @@ public:
     ~AsheTower();
     virtual void upgrade() ;
 
-
-
 protected slots:
     virtual void startShooting();
 private:
-    qreal         toslow;
+    qreal         toslow;//减速了多少
 };
 
 class TristanaTower: public Tower

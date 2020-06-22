@@ -9,11 +9,8 @@ const QSize Enemy::fixedSize(40, 40);
 Enemy::Enemy(TravelPath *nowPoint, BaseScene*game, const QPixmap &icon )
     : QObject(0)
     , ifFree(false)//初始空闲
-    , m_maxHp(40)
-    , m_walkingSpeed(2.0)
-   // , m_rotationSprite(0.0)
-    , pos1(nowPoint->get_pos())//坐标赋值
-  //  , targetPathPoint(nowPoint->get_nextTravelPoint())//目标点就是航点列表中的下一个点
+    , m_walkingSpeed(2.0)   
+    , pos1(nowPoint->get_pos())//坐标赋值 
     , game(game)
     , icon(icon)
     , size(0,0)
@@ -52,10 +49,6 @@ void Enemy::setFree()
 {
     if (!ifFree)//空闲状态的enemy
         return;
-    // 血条的长度
-    // 其实就是2个方框,红色方框表示总生命,固定大小不变
-    // 绿色方框表示当前生命,受m_currentHp / m_maxHp的变化影响
-//	static const int Health_Bar_Width = 20;
     painter->save();
 
     // 绘制偏转坐标,由中心+偏移=左上
@@ -95,9 +88,7 @@ void Enemy::move()
            // game->baselife--;
             game->getbaselife();
             getRemoved();
-//qDebug()<<"ok to move4"<<endl;
-          //  game->removedBlood();
-           // game->bloodbarList.removeOne();
+
             return;
         }
     }
@@ -115,9 +106,6 @@ void Enemy::move()
     pos1 = pos1 + normalized.toPoint() * movementSpeed;
  //   qDebug()<<"ok to enemy_move"<<endl;
 
-    // 确定敌人选择方向
-    // 默认图片向左,需要修正180度转右
-    //m_rotationSprite = qRadiansToDegrees(qAtan2(normalized.y(), normalized.x())) + 180;
 }
 
 void Enemy::getAttacked(Tower *attacker)
@@ -126,7 +114,7 @@ void Enemy::getAttacked(Tower *attacker)
 }
 void Enemy::getRemoved()
 {
-    enemydie->play();
+
  //   qDebug()<<"ok to getremoved enmey"<<endl;
     if (!attackTowersList.empty())
     foreach (Tower *attacker, attackTowersList)
@@ -144,14 +132,12 @@ void Enemy::getDamage(Bullet *bullet)
     // 阵亡,需要移除
     if (life <= 0)
        {
-          enemydie->play();
           qDebug()<<"enemedieplay"<<endl;
-  //      qDebug()<<"kill one*******"<<endl;
+
         game->awardMoney(award);//击杀敌人奖励金钱
         game->getkilled_enemies();//不能确定是不是这里有问题
  //   qDebug()<<"killed ene"<<game->killed_enemies<<endl;
         getRemoved();
-
 
     }
     switch(bullet->bulletKind)
@@ -164,9 +150,7 @@ void Enemy::getDamage(Bullet *bullet)
         case 1://tris
             break;
         case 2://mor
-       // apdamage=apLevel;
-      //   m_walkingSpeed = 0.0;
-        break;
+            break;
     }
 }
 
@@ -174,7 +158,6 @@ void Enemy::getDamage(Bullet *bullet)
 DogFace1::DogFace1(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite)
     :Enemy(startWayPoint, game,sprite)
 {
-
 
     this->pos1=startWayPoint->get_pos();
     this->origionlife=120;//增加血量
@@ -188,7 +171,6 @@ DogFace1::DogFace1(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sp
 DogFace2::DogFace2(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite)
     :Enemy(startWayPoint, game,sprite)
 {
-
 
     this->pos1=startWayPoint->get_pos();
     this->origionlife=120;//增加血量
@@ -204,9 +186,7 @@ Wind::Wind(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite)
 {
     this->origionlife=150;
     this->life=150;
-
     this-> m_walkingSpeed=1.8;
-
     this->pos1=startWayPoint->get_pos();
     this->size=QPoint(-114/2,-86/2);
     this->award=150;
@@ -250,9 +230,7 @@ Yasuo::Yasuo(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite)
     :Enemy(startWayPoint, game,sprite)
 {
     this->award=320;
-    //this->fireLevel=15;
-   // this->iceLevel=15;
-   // this->HPdamage=1;
+
     this->origionlife=100;
     this->life=100;
     this->pos1=startWayPoint->get_pos();

@@ -36,8 +36,7 @@ SOURCES += \
     travelpath.cpp \
     enemy.cpp \
     bloodbar.cpp \
-    bullet.cpp \
-    musiclol.cpp
+    bullet.cpp
 
 
 
@@ -53,8 +52,7 @@ HEADERS += \
     travelpath.h \
     enemy.h \
     bloodbar.h \
-    bullet.h \
-    musiclol.h
+    bullet.h
 
 FORMS += \
         mainwindow.ui

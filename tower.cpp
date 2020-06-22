@@ -78,16 +78,6 @@ void Tower::set_attacked_Enemy(Enemy *enemy)
     choosed_enemy->getAttacked(this);//把该塔加入攻击塔列表中
 }
 
-//void Tower::startShooting()
-//{
-//   // qDebug()<<"i can shoot"<<endl;
-//    Bullet *bullet = new Bullet(pos, choosed_enemy->getpos(), damage, choosed_enemy, game);
-//    bullet->move();
-//    game->addBullet(bullet);
-
-
-// }
-
 
 void Tower::targetKilled()
 {

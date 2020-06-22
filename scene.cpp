@@ -277,6 +277,7 @@ void Scene::paintEvent(QPaintEvent *){
           copyBar->hide();
           statusBar->hide();
           attributeBar->hide();
+
           exit->hide();
           Continue->show();
           Continue->raise();
@@ -502,6 +503,8 @@ void Scene::mousePressEvent(QMouseEvent *event)
                    // this->settleCopy->move(this->whichtowerPos);
                   //  this->settleCopy = nullptr;
                     it->m_hasTower=false;
+                    QSound *remove= new QSound("://AudioConvert/Place.wav",this);
+                    remove->play();
                     return;
                 }
 //否则升级,即左键
@@ -641,6 +644,7 @@ void Scene::mousePressEvent(QMouseEvent *event)
               else cantdosound->play();
 
           }
+          else cantdosound->play();
 
 }
 
@@ -1039,7 +1043,7 @@ void Scene::setTowerup(){
   //设置退出按钮
    exit->setParent(this);//放在当前窗口下
    exit->move(0,0);
-   connect(exit, SIGNAL(clicked()), this, SLOT(leave()));
+   connect(exit, SIGNAL(clicked()), this, SLOT(leave()));//点击退出
    qDebug()<<"i can leave()"<<endl;
    exit->setFlat(true);
    exit->setIconSize(QSize(60,60));
@@ -1513,7 +1517,7 @@ void Scene::removedEnemy(Enemy *enemy)
     Q_ASSERT(enemy);
     bloodbarList.removeOne(enemy->blood);
     m_enemyList.removeOne(enemy);
-
+    enemydie->play();
     delete enemy;
    // Scene::removedBlood();
     if (m_enemyList.empty())
@@ -1706,12 +1710,10 @@ void Scene::updateMap()
 {
     foreach (Enemy *enemy, m_enemyList)
         enemy->move();
-
-
     foreach (Tower *tower, m_towersList)
         tower->checkEnemyInRange();
-    foreach (BloodBar *blood, bloodbarList)
-        blood->check();
+//    foreach (BloodBar *blood, bloodbarList)
+//        blood->check();
     update();
 }
 void CanyonScene::updateMap()
@@ -1725,8 +1727,8 @@ void CanyonScene::updateMap()
     }
     foreach (Tower *tower, m_towersList)
         tower->checkEnemyInRange();
-    foreach (BloodBar *blood, bloodbarList)
-        blood->check();
+//    foreach (BloodBar *blood, bloodbarList)
+//        blood->check();
     update();
 }
 
@@ -1742,8 +1744,6 @@ void BaseScene::awardMoney(int money){
     update();
 }
 void BaseScene::drawhaveMoney(){
-//    painter->setPen(QPen(Qt::red));
-//    painter->drawText(QRect(200, 100, 200, 25), QString("GOLD : %1").arg(haveMoney));
 
     MoneyFront->setText(QString("%1").arg(haveMoney));
     MoneyFront->setAlignment(Qt::AlignHCenter);
@@ -1783,6 +1783,7 @@ void BaseScene::getbaselife(){
 }
 void BaseScene::getkilled_enemies(){
     killed_enemies++;
+
     if(killed_enemies==14)
        {
         godlike= new QSound(":/AudioConvert/godlike.wav",this);
@@ -1808,11 +1809,6 @@ void BaseScene::dogameover()
 
 ChoiceScene::ChoiceScene(QWidget* parent):QLabel(parent)
 {
-
-
-//    QUrl backgroundMusicUrl = QUrl::fromLocalFile(s_curDir + "/First Page.mp3");
-//    m_audioPlayer = new AudioPlayer(backgroundMusicUrl,this);
-//    m_audioPlayer->startBGM();
     this->setMouseTracking(true);
     this->grabKeyboard();
     this->setGeometry(0, 0, 1200, 639);//多大
@@ -1917,18 +1913,16 @@ void ChoiceScene::playCanyon(){
 
 }
 void ChoiceScene::back()
-{  qDebug()<<"i can back()"<<endl;
+{
+    qDebug()<<"i can back()"<<endl;
     this->setFixedSize(1200, 639);
     choicesound->play();
     if (scene)
     {   qDebug()<<"i can back()1"<<endl;
-        //ChoiceScene * chosce=new ChoiceScene;
-      //  delete scene;
         scene->hide();
-
         this->show();
-        qDebug()<<"ok to delete scene"<<endl;
         scene = nullptr;
+    //    delete scene;
         qDebug()<<"ok to set nullptr"<<endl;
     }
 
@@ -1936,13 +1930,17 @@ void ChoiceScene::back()
 }
 void Scene::leave(){
     basesound->stop();
-
-    qDebug()<<"i can leave()2"<<endl;
+    winsound->stop();
+    enemydie->stop();
+ //   qDebug()<<"i can leave()2"<<endl;
     emit leavescene();
-    qDebug()<<"i can leave()3"<<endl;
+    this->close();
+ //   qDebug()<<"i can leave()3"<<endl;
 }
 void CanyonScene::leave(){
     basesound->stop();
+    winsound->stop();
+    enemydie->stop();
     emit leavescene();
 }
 

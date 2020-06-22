@@ -16,15 +16,12 @@ public:
     bool hasTower() const;
     const QPoint centerPos() const;
     bool containPoint(const QPoint &pos) const;
-
     void draw(QPainter *painter) const;
     Tower*       m_tower;
     bool		m_hasTower;
 private:
     QPoint		m_pos;
-
     QPixmap		m_sprite;
-
     static const QSize ms_fixedSize;
 };
 

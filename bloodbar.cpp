@@ -16,14 +16,9 @@ BloodBar::BloodBar(Enemy *parent,BaseScene *game):
 BloodBar ::~BloodBar(){
 
 }
-void BloodBar::draw(QPainter *p)
-{/*
-    if(parent->getLife()<=0)
-    {
-        getremoved();
-        qDebug()<<"bloodbar getremoved"<<endl;
 
-    }*/
+void BloodBar::draw(QPainter *p)
+{
     if (!parent->ifFree)//空闲状态的enemy
         return;
    // qDebug()<<"draw bloodbar"<<endl;
@@ -53,6 +48,4 @@ void BloodBar::draw(QPainter *p)
 void BloodBar::getremoved(){
      game->removedBlood(this);
 }
-void BloodBar::check(){
 
-}

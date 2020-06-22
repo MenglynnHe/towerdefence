@@ -23,6 +23,7 @@
         <file>AudioConvert/upgrade.wav</file>
         <file>AudioConvert/can'tdo.wav</file>
         <file>AudioConvert/enemydie_1_1.wav</file>
+        <file>AudioConvert/Place.wav</file>
     </qresource>
     <qresource prefix="/enemy">
         <file>enemy/blood1.png</file>

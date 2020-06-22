@@ -26,7 +26,6 @@ public:
     int             bulletKind;
     qreal           slow_speed;
     QSound *        bulletsound =nullptr;
-protected:
 
 private slots:
     void hitTarget();
@@ -42,29 +41,25 @@ private:
 
     static const QSize fixedSize;
 };
+
 class AsheBullet: public Bullet{
     Q_OBJECT
-
 public:
     AsheBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, qreal slow = 1.0,const QPixmap &sprite = QPixmap(":/bullet/ashebullet.png"));
-
 };
+
 class TrisBullet: public Bullet
 {
     Q_OBJECT
-
 public:
     TrisBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, const QPixmap &sprite = QPixmap(":/bullet/trisbullet.png"));
-
 };
 
 class MorganaBullet: public Bullet
 {
     Q_OBJECT
-
 public:
     MorganaBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, const QPixmap &sprite = QPixmap(":/bullet/Morganabullet.png"));
-
 };
 
 #endif // BULLET_H
