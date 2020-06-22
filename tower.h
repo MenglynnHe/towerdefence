@@ -6,6 +6,7 @@
 #include <QtMath>
 #include"QTimer"
 #include "enemy.h"
+#include "QSound"
 class Enemy;
 class BaseScene;
 //碰撞检测
@@ -26,7 +27,7 @@ class Tower : public QObject
     Q_OBJECT
 public:
     //Tower(QObject *parent = nullptr);
-    Tower(QPoint pos,BaseScene * game,const   QPixmap &sprite= QPixmap(":/picture/towerashe.png") );
+    Tower(QPoint pos,BaseScene * game,const   QPixmap &sprite= QPixmap(":/m/picture/towerashe.png") );
     ~Tower();
     virtual void draw(QPainter *painter) const;//画塔
     void drawelli(QPainter *painter) const;
@@ -46,10 +47,11 @@ public:
     int             m_level;
     int             kind;
     virtual void upgrade() = 0;
+    QSound * towersound=nullptr;
 protected:
     int            timerId2;
     bool			attacking;
-    qreal			rotationIcon;
+//    qreal			rotationIcon;
 
     int				attackRange;	// 代表塔可以攻击到敌人的距离
     int				damage;		// 代表攻击敌人时造成的伤害
@@ -74,7 +76,7 @@ class AsheTower: public Tower
 {
     Q_OBJECT
 public:
-    AsheTower(QPoint pos, BaseScene * game, const QPixmap &sprite = QPixmap(":/picture/towerashe.png"));
+    AsheTower(QPoint pos, BaseScene * game, const QPixmap &sprite = QPixmap(":/m/picture/towerashe.png"));
     ~AsheTower();
     virtual void upgrade() ;
 
@@ -90,7 +92,7 @@ class TristanaTower: public Tower
 {
     Q_OBJECT
 public:
-   TristanaTower(QPoint pos, BaseScene * game, const QPixmap &sprite = QPixmap(":/picture/tristower.png"));
+   TristanaTower(QPoint pos, BaseScene * game, const QPixmap &sprite = QPixmap(":/m/picture/tristower.png"));
     ~TristanaTower();
 
     virtual void upgrade() ;
@@ -103,7 +105,7 @@ class MorganaTower: public Tower
 {
     Q_OBJECT
 public:
-   MorganaTower(QPoint pos, BaseScene * game, const QPixmap &sprite = QPixmap(":/picture/Morgana.png"));
+   MorganaTower(QPoint pos, BaseScene * game, const QPixmap &sprite = QPixmap(":/m/picture/Morgana.png"));
     ~MorganaTower();
 
    virtual void upgrade() ;

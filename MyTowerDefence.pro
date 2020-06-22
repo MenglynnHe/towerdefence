@@ -3,9 +3,10 @@
 # Project created by QtCreator 2020-05-05T11:13:10
 #
 #-------------------------------------------------
+QT       += core gui multimedia
 
-QT       += core gui
 CONFIG += c++11
+CONFIG += resources_big
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = MyTowerDefence
@@ -35,7 +36,8 @@ SOURCES += \
     travelpath.cpp \
     enemy.cpp \
     bloodbar.cpp \
-    bullet.cpp
+    bullet.cpp \
+    musiclol.cpp
 
 
 
@@ -51,7 +53,8 @@ HEADERS += \
     travelpath.h \
     enemy.h \
     bloodbar.h \
-    bullet.h
+    bullet.h \
+    musiclol.h
 
 FORMS += \
         mainwindow.ui

@@ -10,7 +10,7 @@ class TowerPosition
 {
 
 public:
-    TowerPosition(QPoint pos, const QPixmap &sprite = QPixmap(":/picture/buttom2.png"));
+    TowerPosition(QPoint pos, const QPixmap &sprite = QPixmap(":/thing/picture/buttom2.png"));
 
     void setHasTower(bool hasTower = true);
     bool hasTower() const;

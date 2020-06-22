@@ -1,18 +1,32 @@
 <RCC>
     <qresource prefix="/">
-        <file>picture/buttom2.png</file>
-        <file>picture/logo.jpg</file>
-        <file>picture/map1.jpg</file>
-        <file>picture/startbutton.png</file>
-        <file>picture/timg.jpg</file>
-        <file>picture/title.png</file>
-        <file>picture/towerashe.png</file>
-        <file>picture/pic.png</file>
-        <file>picture/copybase.png</file>
-        <file>picture/timga.png</file>
-        <file>picture/ashecopy.jpg</file>
-        <file>picture/tristana.jpg</file>
-        <file>picture/tristower.png</file>
+        <file>AudioConvert/Aatroxdefeat.wav</file>
+        <file>AudioConvert/Aatroxvictory.wav</file>
+        <file>AudioConvert/Ashe(0).wav</file>
+        <file>AudioConvert/Ashefor.wav</file>
+        <file>AudioConvert/AsheMove.wav</file>
+        <file>AudioConvert/choosescene.wav</file>
+        <file>AudioConvert/entry.wav</file>
+        <file>AudioConvert/godlike.wav</file>
+        <file>AudioConvert/MorganaMove.wav</file>
+        <file>AudioConvert/showtime.wav</file>
+        <file>AudioConvert/TristanaWork.wav</file>
+        <file>bullet/ashebullet.png</file>
+        <file>bullet/Morganabullet.png</file>
+        <file>bullet/trisbullet.png</file>
+        <file>AudioConvert/fight.wav</file>
+        <file>AudioConvert/showtime_1.wav</file>
+        <file>AudioConvert/hitAshe.wav</file>
+        <file>AudioConvert/hitMor.wav</file>
+        <file>AudioConvert/hittris (2).wav</file>
+        <file>AudioConvert/legendary.wav</file>
+        <file>AudioConvert/upgrade.wav</file>
+        <file>AudioConvert/can'tdo.wav</file>
+        <file>AudioConvert/enemydie_1_1.wav</file>
+    </qresource>
+    <qresource prefix="/enemy">
+        <file>enemy/blood1.png</file>
+        <file>enemy/blood2.png</file>
         <file>enemy/dogface.png</file>
         <file>enemy/dogface1.png</file>
         <file>enemy/dragon1.png</file>
@@ -20,24 +34,40 @@
         <file>enemy/draven.png</file>
         <file>enemy/enemy2.png</file>
         <file>enemy/yasuo.png</file>
-        <file>enemy/blood1.png</file>
-        <file>enemy/blood2.png</file>
-        <file>picture/u=3817788749,2795166190&amp;fm=26&amp;gp=0.jpg</file>
-        <file>bullet/ashebullet.png</file>
-        <file>bullet/bulletcopy.png</file>
-        <file>picture/bullet/trisbullet1.png</file>
-        <file>picture/bullet/trisbullet.png</file>
-        <file>picture/Morgana.png</file>
-        <file>bullet/Morganabullet.png</file>
+    </qresource>
+    <qresource prefix="/m">
         <file>tower/mogana.png</file>
-        <file>picture/statebar.png</file>
-        <file>picture/upgrade.png</file>
+        <file>picture/ashecopy.jpg</file>
+        <file>picture/tristana.jpg</file>
+        <file>picture/Morgana.png</file>
+        <file>picture/towerashe.png</file>
+        <file>picture/tristower.png</file>
+    </qresource>
+    <qresource prefix="/map">
+        <file>picture/1.png</file>
+        <file>picture/timga.png</file>
+    </qresource>
+    <qresource prefix="/thing">
         <file>picture/attribute.png</file>
         <file>picture/attribute2.png</file>
         <file>picture/attribute3.png</file>
+        <file>picture/btnplay.png</file>
         <file>picture/choice1.png</file>
         <file>picture/choice2.png</file>
-        <file>picture/1.png</file>
         <file>picture/choicescene.png</file>
+        <file>picture/copybase.png</file>
+        <file>picture/defeat.png</file>
+        <file>picture/exit2.png</file>
+        <file>picture/logo.jpg</file>
+        <file>picture/map1.jpg</file>
+        <file>picture/startbutton.png</file>
+        <file>picture/statebar.png</file>
+        <file>picture/title.png</file>
+        <file>picture/toplay.png</file>
+        <file>picture/u=3817788749,2795166190&amp;fm=26&amp;gp=0.jpg</file>
+        <file>picture/upgrade.png</file>
+        <file>picture/victory.png</file>
+        <file>picture/buttom2.png</file>
+        <file>picture/backbtn.png</file>
     </qresource>
 </RCC>

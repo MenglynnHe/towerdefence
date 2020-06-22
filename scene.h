@@ -13,6 +13,7 @@
 #include "enemy.h"
 #include "bullet.h"
 #include "bloodbar.h"
+#include "QSound"
 //场景布置
 class Enemy;
 class Tower;
@@ -31,11 +32,13 @@ public:
     Tower* currenttower;//@
 
     explicit BaseScene(QWidget *parent = 0);
-    virtual  ~BaseScene();
+   virtual  ~BaseScene();
     void mouseMoveEvent(QMouseEvent *event);
 
 
- //   QTimer* timer = nullptr;//@
+    Copy *ashetowercopy = new AsheTowerCopy(this);
+    Copy *tristanatowercopy = new TristanaTowerCopy(this);
+    Copy *Morganatowercopy= new MorganaTowerCopy(this);
     QLabel* WaveFront = new QLabel(this);//波数
     QLabel* baselifeFront = new QLabel(this);//基地生命值
     QLabel* MoneyFront = new QLabel(this);//金币
@@ -45,19 +48,25 @@ public:
     QLabel* attackRate   = new QLabel(this);//攻击速度
     QLabel* Level       = new QLabel(this);//级别
     QLabel* upgradeBar1 = new QLabel(this);//点升级
-    QMovie* upgradebar1 = new QMovie(":/picture/upgrade.png");
+    QMovie* upgradebar1 = new QMovie(":/thing/picture/upgrade.png");
     QLabel* upgradeBar2 = new QLabel(this);
-    QMovie* upgradebar2 = new QMovie(":/picture/upgrade.png");
+    QMovie* upgradebar2 = new QMovie(":/thing/picture/upgrade.png");
     QLabel* upgradeBar3 = new QLabel(this);
-    QMovie* upgradebar3 = new QMovie(":/picture/upgrade.png");
+    QMovie* upgradebar3 = new QMovie(":/thing/picture/upgrade.png");
 
     QLabel* copyBar = new QLabel(this);
-    QMovie* copyBarPic = new QMovie(":/picture/copybase.png");
+    QMovie* copyBarPic = new QMovie(":/thing/picture/copybase.png");
     QLabel* statusBar = new QLabel(this);
-    QMovie* statusBarPic = new QMovie(":/picture/statebar.png");
+    QMovie* statusBarPic = new QMovie(":/thing/picture/statebar.png");
     QLabel* attributeBar = new QLabel(this);
-    QMovie* attributeBarPic = new QMovie(":/picture/attribute.png");
-
+    QMovie* attributeBarPic = new QMovie(":/thing/picture/attribute.png");
+    QSound* winsound = new QSound(":/AudioConvert/Aatroxvictory.wav",this);
+    QSound* defeatsound = new QSound(":/AudioConvert/Aatroxdefeat.wav",this);
+    QSound* basesound=nullptr;
+    QSound* godlike=nullptr;
+    QSound* startshow =new QSound(":/AudioConvert/showtime_1.wav",this);
+    QSound* upgradesound = new QSound(":/AudioConvert/upgrade.wav",this);
+    QSound* cantdosound = new QSound(":/AudioConvert/can'tdo.wav",this);
 
     // move to base class
     void addBullet(Bullet *bullet);//@
@@ -81,7 +90,9 @@ public:
     QList<Enemy *>			m_enemyList;//@
     QList<BloodBar *>       bloodbarList;
     QList<Tower *>			m_towersList;//@
-    MyPushButton *exit=new MyPushButton(":/picture/u=3817788749,2795166190&fm=26&gp=0.jpg");
+    MyPushButton *exit=new MyPushButton(":/thing/picture/backbtn.png");
+    MyPushButton *Continue=new MyPushButton(":/thing/picture/exit2.png");
+
     int						waves;//@
     bool                    gameEnded;//@
     bool                    gameWin;//@
@@ -96,11 +107,14 @@ public:
  //   AudioPlayer *		    m_audioPlayer;
 
 signals:
- //   void toTitle(); //返回信号，返回主界面
+    void toTitle(); //返回信号，返回主界面
+    void toCanyon();
+    void toPolar();
 
 
 public slots:
     void MorIceattack();//攻击效果实现，只有Mor控制效果和ashe的减速效果
+
 };
 
 
@@ -115,15 +129,23 @@ class ChoiceScene : public QLabel
 public:
     explicit ChoiceScene(QWidget* parent = 0);
     ~ChoiceScene();
-
+    QTimer* timer = nullptr;//@
+    QSound *choicesound= new QSound(":/AudioConvert/choosescene.wav",this);
 private:
-    QMovie* background = new QMovie(":/picture/choicescene.png");
-    Scene * scene=nullptr;
-    CanyonScene * canyonscene= nullptr;
+    QMovie* background = new QMovie(":/thing/picture/choicescene.png");
+    BaseScene * scene=nullptr;
 
-public slots:
-    void playPolar();//开始游戏
-    void playCanyon();
+
+signals:
+   void toTitle();
+   void toCanyon();
+   void toPolar();
+private slots:
+   void onTimer();
+   void playPolar();//开始游戏
+   void playCanyon();
+   void back();
+ //  void leave();
 
 };
 
@@ -174,12 +196,14 @@ private:
 
 
 signals:
-//     void toPlay();
-//     void toTitle();
-
+       leavescene();
 public slots:
     void updateMap();
     void gameStart();  
+    void leave(); // emit toTitle();
+
+   // void back();
+
 };
 
 //*************************
@@ -200,6 +224,7 @@ public:
     void setTowerup();//确定塔可以放的位置 @@
     void setCopyup();//设置基塔放置的地方，就是选择塔的地方@@
     void mousePressEvent(QMouseEvent * event);//
+
 //    QList<TravelPath *> m_pathPointsList;	// 在paintEvent中需要进行绘制
 
 
@@ -242,10 +267,14 @@ private:
 signals:
 //     void toPlay();
 //     void toTitle();
+     leavescene();
 
 public slots:
     void updateMap();
     void gameStart();
+    void leave(); // emit toTitle();
+ //   void back();
+
 };
 
 

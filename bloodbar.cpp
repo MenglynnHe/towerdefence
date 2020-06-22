@@ -9,8 +9,8 @@ BloodBar::BloodBar(Enemy *parent,BaseScene *game):
     setMaximum(500);//设置进度条的最大值
     rect = QRect(parent->getpos().x(), parent->getpos().y()-10, 60, 15);
     textRect = QRect(parent->getpos().x(), parent->getpos().y()-10, 60, 15);
-    buttomMap = QPixmap(":/enemy/blood2.png");
-    fillMap = QPixmap(":/enemy/blood1.png");
+    buttomMap = QPixmap(":/enemy/enemy/blood1.png");
+    fillMap = QPixmap(":/enemy/enemy/blood2.png");
     font = QFont("Microsoft YaHei", 10, QFont::Bold);//设置字体样式
 }
 BloodBar ::~BloodBar(){

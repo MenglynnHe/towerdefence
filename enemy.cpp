@@ -126,6 +126,7 @@ void Enemy::getAttacked(Tower *attacker)
 }
 void Enemy::getRemoved()
 {
+    enemydie->play();
  //   qDebug()<<"ok to getremoved enmey"<<endl;
     if (!attackTowersList.empty())
     foreach (Tower *attacker, attackTowersList)
@@ -143,11 +144,15 @@ void Enemy::getDamage(Bullet *bullet)
     // 阵亡,需要移除
     if (life <= 0)
        {
+          enemydie->play();
+          qDebug()<<"enemedieplay"<<endl;
   //      qDebug()<<"kill one*******"<<endl;
         game->awardMoney(award);//击杀敌人奖励金钱
         game->getkilled_enemies();//不能确定是不是这里有问题
  //   qDebug()<<"killed ene"<<game->killed_enemies<<endl;
         getRemoved();
+
+
     }
     switch(bullet->bulletKind)
     {
@@ -166,8 +171,8 @@ void Enemy::getDamage(Bullet *bullet)
 }
 
 
-DogFace1::DogFace1(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
-    :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
+DogFace1::DogFace1(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite)
+    :Enemy(startWayPoint, game,sprite)
 {
 
 
@@ -180,8 +185,8 @@ DogFace1::DogFace1(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sp
     this->apLevel=8;
 
 }
-DogFace2::DogFace2(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
-    :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
+DogFace2::DogFace2(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite)
+    :Enemy(startWayPoint, game,sprite)
 {
 
 
@@ -194,8 +199,8 @@ DogFace2::DogFace2(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sp
     this->apLevel=8;
 
 }
-Wind::Wind(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy2.png")*/)
-    :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy2.png")*/)
+Wind::Wind(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite)
+    :Enemy(startWayPoint, game,sprite)
 {
     this->origionlife=150;
     this->life=150;
@@ -210,8 +215,8 @@ Wind::Wind(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* =
     this->apLevel=0;
 }
 
-Nashor::Nashor(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
-    :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
+Nashor::Nashor(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite)
+    :Enemy(startWayPoint, game,sprite)
 {
 
     this->award=300;
@@ -225,8 +230,8 @@ Nashor::Nashor(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite
     this->apLevel=0;
 }
 
-Draven::Draven(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
-    :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
+Draven::Draven(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite)
+    :Enemy(startWayPoint, game,sprite)
 {
     this->award=320;
 
@@ -241,8 +246,8 @@ Draven::Draven(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite
  //   qDebug()<<"ok to create an draven enemy!!"<<endl;
 }
 
-Yasuo::Yasuo(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite/* = QPixmap(":/image/enemy1.png")*/)
-    :Enemy(startWayPoint, game,sprite/* = QPixmap(":/image/enemy1.png")*/)
+Yasuo::Yasuo(TravelPath *startWayPoint, BaseScene *game, const QPixmap &sprite)
+    :Enemy(startWayPoint, game,sprite)
 {
     this->award=320;
     //this->fireLevel=15;

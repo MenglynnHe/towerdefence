@@ -7,6 +7,7 @@
 #include "enemy.h"
 #include <QSize>
 #include "QDebug"
+#include "QSound"
 class Bullet :public QObject
 {
     Q_OBJECT
@@ -14,7 +15,7 @@ class Bullet :public QObject
 
 public:
     Bullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target,
-           BaseScene *game, qreal slow = 1,const QPixmap &icon= QPixmap(":/bullet/bulletcopy.png"));
+           BaseScene *game, qreal slow = 1,const QPixmap &icon= QPixmap(":/bullet/ashebullet.png"));
 
     void draw(QPainter *painter) const;
     void move();
@@ -24,6 +25,7 @@ public:
     int				damage;
     int             bulletKind;
     qreal           slow_speed;
+    QSound *        bulletsound =nullptr;
 protected:
 
 private slots:
@@ -52,7 +54,8 @@ class TrisBullet: public Bullet
     Q_OBJECT
 
 public:
-    TrisBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, const QPixmap &sprite = QPixmap(":/picture/bullet/trisbullet1.png"));
+    TrisBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, const QPixmap &sprite = QPixmap(":/bullet/trisbullet.png"));
+
 };
 
 class MorganaBullet: public Bullet
@@ -61,6 +64,7 @@ class MorganaBullet: public Bullet
 
 public:
     MorganaBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, const QPixmap &sprite = QPixmap(":/bullet/Morganabullet.png"));
+
 };
 
 #endif // BULLET_H

@@ -31,7 +31,7 @@ void Tower::draw(QPainter *painter) const
     // 绘制炮塔并选择炮塔
     painter->translate(pos);//画家移动到m_pos
   //  qDebug()<<"translate"<<m_pos.x()<<" "<<m_pos.y()<<endl;
-    painter->rotate(rotationIcon);//旋转角度
+ //   painter->rotate(rotationIcon);//旋转角度
 
     painter->drawPixmap(offsetPoint, icon);//从回到左上角开始画塔的图片
    // qDebug()<<offsetPoint<<endl;
@@ -49,7 +49,7 @@ void Tower::checkEnemyInRange()
         // 向量标准化??
         QVector2D normalized(choosed_enemy->getpos() - pos);
         normalized.normalize();
-        rotationIcon = qRadiansToDegrees(qAtan2(normalized.y(), normalized.x())) - 90;
+  //      rotationIcon = qRadiansToDegrees(qAtan2(normalized.y(), normalized.x())) - 90;
 
         // 如果敌人脱离攻击范围,就忘记敌人
         if (!if_collision_inCircle(pos, attackRange, choosed_enemy->getpos(), 1))
@@ -95,7 +95,7 @@ void Tower::targetKilled()
         choosed_enemy = NULL;
 
     attackTimer->stop();//暂停攻击
-    rotationIcon= 0.0;
+ //   rotationIcon= 0.0;
 }
 
 void Tower::forgiveEnemy()
@@ -105,7 +105,7 @@ void Tower::forgiveEnemy()
         choosed_enemy = NULL;
 
     attackTimer->stop();
-    rotationIcon = 0.0;
+  //  rotationIcon = 0.0;
 }
 AsheTower::AsheTower(QPoint pos, BaseScene * game, const QPixmap &sprite)
     : Tower(pos, game, sprite)
@@ -113,6 +113,8 @@ AsheTower::AsheTower(QPoint pos, BaseScene * game, const QPixmap &sprite)
     kind=0;
    // attackRate=100;
     toslow=1.0;
+    towersound= new QSound(":/AudioConvert/AsheMove.wav",this);
+    towersound->play();
 }
 
 AsheTower::~AsheTower()
@@ -141,7 +143,8 @@ TristanaTower::TristanaTower(QPoint pos, BaseScene * game, const QPixmap &sprite
 {
     attackRange=150;
     kind=1;
-
+    towersound= new QSound(":/AudioConvert/TristanaWork.wav",this);
+    towersound->play();
 
 }
 
@@ -170,6 +173,9 @@ MorganaTower::MorganaTower(QPoint pos, BaseScene * game, const QPixmap &sprite)
 {
     kind=2;
     attackRange=120;
+    towersound= new QSound(":/AudioConvert/MorganaMove.wav",this);
+    towersound->play();
+
 }
 
 MorganaTower::~MorganaTower()

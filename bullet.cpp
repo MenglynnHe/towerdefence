@@ -35,6 +35,7 @@ void Bullet::move()
     connect(animation, SIGNAL(finished()), this, SLOT(hitTarget()));
 
     animation->start();
+    //bulletsound->play();
  //   qDebug()<<"already to bullet move"<<endl;
 }
 
@@ -61,17 +62,19 @@ QPoint Bullet::currentPos() const
 AsheBullet::AsheBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game, qreal slow,const QPixmap &sprite)
     :Bullet(startPos, targetPoint, damage, target, game,slow,sprite)
 {
-
+   bulletsound=new QSound(":/AudioConvert/hitAshe.wav",this);
 }
 
 TrisBullet::TrisBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game,  const QPixmap &sprite)
     :Bullet(startPos, targetPoint, damage, target, game,1, sprite)
 {
     bulletKind=1;
+    bulletsound=new QSound(":/AudioConvert/hittris (2).wav",this);
 }
 
 MorganaBullet::MorganaBullet(QPoint startPos, QPoint targetPoint, int damage, Enemy *target, BaseScene *game,  const QPixmap &sprite)
     :Bullet(startPos, targetPoint, damage, target, game,1,sprite)
 {
     bulletKind=2;
+    bulletsound= new QSound(":/AudioConvert/hitMor.wav",this);
 }

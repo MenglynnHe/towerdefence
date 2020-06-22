@@ -18,7 +18,7 @@ public:
     AsheTowerCopy(QLabel *parent =0);
     ~AsheTowerCopy();
 private:
-    QMovie * copypic= new QMovie(":/picture/ashecopy.jpg");
+    QMovie * copypic= new QMovie(":/m/picture/ashecopy.jpg");
 };
 
 class TristanaTowerCopy :public Copy
@@ -27,7 +27,7 @@ public:
     TristanaTowerCopy(QLabel *parent =0);
     ~TristanaTowerCopy();
 private:
-    QMovie * copypic= new QMovie(":/picture/tristana.jpg");
+    QMovie * copypic= new QMovie(":/m/picture/tristana.jpg");
 };
 
 class MorganaTowerCopy :public Copy
@@ -36,6 +36,6 @@ public:
     MorganaTowerCopy(QLabel *parent =0);
     ~MorganaTowerCopy();
 private:
-    QMovie * copypic= new QMovie("://tower/mogana.png");
+    QMovie * copypic= new QMovie(":/m/tower/mogana.png");
 };
 #endif // COPY_H

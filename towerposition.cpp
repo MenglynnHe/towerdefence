@@ -4,7 +4,7 @@
 #include "QDebug"
 const QSize TowerPosition::ms_fixedSize(70, 70);
 
-TowerPosition::TowerPosition(QPoint pos, const QPixmap &sprite/*= QPixmap("://picture/unnamed (4).jpg")*/)//定义时已经定义了，这里不用再初始化
+TowerPosition::TowerPosition(QPoint pos, const QPixmap &sprite)//定义时已经定义了，这里不用再初始化
     : m_hasTower(false)
     , m_pos(pos)
     , m_sprite(sprite)

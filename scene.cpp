@@ -11,6 +11,7 @@
 #include "QTimer"
 #include "copy.h"
 #include "enemy.h"
+#include "QSound"
 static const int TowerCost = 200;
 BaseScene::BaseScene(QWidget *parent) : QLabel(parent)
   , waves(0)
@@ -23,6 +24,7 @@ BaseScene::BaseScene(QWidget *parent) : QLabel(parent)
 {
     this->setMouseTracking(true);
     this->grabKeyboard();
+
 }
 BaseScene::~BaseScene()
 {
@@ -91,8 +93,13 @@ void BaseScene::mouseMoveEvent(QMouseEvent *event)
 
 Scene::Scene(QWidget *parent) : BaseScene(parent)
 {
+    haveMoney=1000;
+    basesound=new QSound(":/AudioConvert/fight.wav",this);
     this->setFixedSize(1200, 639);
     this->show();
+    basesound->setLoops(-1);
+    basesound->play();
+    startshow->play();
     loadTowerPositions();
     addPathPoints();
     preLoadWavesInfo();
@@ -107,13 +114,17 @@ Scene::Scene(QWidget *parent) : BaseScene(parent)
     timer->start(30);
    //  qDebug()<<"ok"<<endl;
     setTowerup();
-     QTimer::singleShot(300, this, SLOT(gameStart()));
+     QTimer::singleShot(5000, this, SLOT(gameStart()));
 
 }
 CanyonScene::CanyonScene(QWidget *parent) : BaseScene(parent)
 {
+    basesound=new QSound(":/AudioConvert/fight.wav",this);
     this->setFixedSize(1200, 639);
     this->show();
+    basesound->setLoops(-1);
+    basesound->play();
+    startshow->play();
     preLoadWavesInfo();
     loadTowerPositions();
 
@@ -135,7 +146,7 @@ CanyonScene::CanyonScene(QWidget *parent) : BaseScene(parent)
     timer->start(30);
 
     setTowerup();
-     QTimer::singleShot(300, this, SLOT(gameStart()));
+     QTimer::singleShot(5000, this, SLOT(gameStart()));
 
 }
 
@@ -237,26 +248,70 @@ CanyonScene::~CanyonScene(){
 
 }
 void Scene::paintEvent(QPaintEvent *){
-  if(gameEnded||gameWin)//赢了或结束了，结束即输了
-{
+
+      //处理游戏结束后的画面
+      if (gameEnded || gameWin)
+      {
+          lab1->hide();
+          lab2->hide();
+          lab3->hide();
+          lab4->hide();
+          lab5->hide();
+          lab6->hide();
+          lab7->hide();
+          lab8->hide();
+          lab9->hide();
+          lab10->hide();
+          lab11->hide();
+
+          MoneyFront->hide();
+          baselifeFront->hide();
+          killedFront->hide();
+          attack  ->hide();
+          attackRate->hide();
+          Level->hide();
+          WaveFront->hide();
+          upgradeBar1->hide();
+          upgradeBar2->hide();
+          upgradeBar3->hide();
+          copyBar->hide();
+          statusBar->hide();
+          attributeBar->hide();
+          exit->hide();
+          Continue->show();
+          Continue->raise();
+//          ashetowercopy->hide();
+//          tristanatowercopy->hide();
+//          Morganatowercopy->hide();
+
+          foreach (Copy *copy, towerCopy)
+          {
+              Q_ASSERT(copy);
+              towerCopy.removeOne(copy);
+              delete copy;
+          }
+
       if(gameWin){
-      QPixmap loseScene(":/picture/title.png");
-      QPainter painter(this);
-      painter.drawPixmap(0, 0, loseScene);
+
+          QPixmap winScene(":/thing/picture/victory.png");
+          QPainter painter(this);
+          painter.drawPixmap(0, 0, winScene);
+
 
       }
 
       if(gameEnded)
       {
-          QPixmap loseScene(":/picture/title.png");
+
+          QPixmap loseScene(":/thing/picture/defeat.png");
           QPainter painter(this);
           painter.drawPixmap(0, 0, loseScene);
       }
       return;
 
 }
-    QPixmap backgroundPix(":/picture/timga.png"); //背景
-   // QPixmap copybarPix(":/picture/copybase.png"); //放置基塔的状态栏
+    QPixmap backgroundPix(":/map/picture/timga.png"); //背景
+   // QPixmap copybarPix(":/thing/picture/copybase.png"); //放置基塔的状态栏
     QPainter cachePainter(&backgroundPix);
 
 //    foreach (const TowerPosition &towerPos, m_towerPositionsList)
@@ -268,8 +323,8 @@ void Scene::paintEvent(QPaintEvent *){
         tower->draw(&cachePainter);
     // qDebug()<<"ok to draw tower"<<endl;
 //画敌人行进路线
-    foreach (const TravelPath *travelpath, m_pathPointsList)
-        travelpath->draw(&cachePainter);
+//    foreach (const TravelPath *travelpath, m_pathPointsList)
+//        travelpath->draw(&cachePainter);
 //敌人前进
     foreach (Enemy *enemy, m_enemyList)
         enemy->draw(&cachePainter);
@@ -287,33 +342,61 @@ void Scene::paintEvent(QPaintEvent *){
 
     QPainter painter(this);
     painter.drawPixmap(0, 0, backgroundPix);
-   // painter.drawPixmap(480,550,copybarPix);
-
-
-
-
-
 }
 
 void CanyonScene::paintEvent(QPaintEvent *){
   if(gameEnded||gameWin)//赢了或结束了，结束即输了
 {
+      lab1->hide();
+      lab2->hide();
+      lab3->hide();
+      lab4->hide();
+      lab5->hide();
+      lab6->hide();
+      lab7->hide();
+      lab8->hide();
+      lab9->hide();
+      lab10->hide();
+      lab11->hide();
+
+      MoneyFront->hide();
+      baselifeFront->hide();
+      killedFront->hide();
+      attack  ->hide();
+      attackRate->hide();
+      Level->hide();
+      WaveFront->hide();
+      upgradeBar1->hide();
+      upgradeBar2->hide();
+      upgradeBar3->hide();
+      copyBar->hide();
+      statusBar->hide();
+      attributeBar->hide();
+      ashetowercopy->hide();
+      tristanatowercopy->hide();
+      Morganatowercopy->hide();
+      exit->hide();
+      Continue->show();
+      Continue->raise();
       if(gameWin){
-      QPixmap loseScene(":/picture/title.png");
-      QPainter painter(this);
-      painter.drawPixmap(0, 0, loseScene);
+
+          QPixmap winScene(":/thing/picture/victory.png");
+          QPainter painter(this);
+          painter.drawPixmap(0, 0, winScene);
       }
 
       if(gameEnded)
       {
-          QPixmap loseScene(":/picture/title.png");
+
+          QPixmap loseScene(":/thing/picture/defeat.png");
           QPainter painter(this);
           painter.drawPixmap(0, 0, loseScene);
+
       }
       return;
 
 }
-    QPixmap backgroundPix(":/picture/1.png"); //背景
+    QPixmap backgroundPix(":/map/picture/1.png"); //背景
     QPainter cachePainter(&backgroundPix);
 
 //建立塔
@@ -428,19 +511,19 @@ void Scene::mousePressEvent(QMouseEvent *event)
                   { attributeBar->setGeometry(270,529,239,109);
                     attributeBarPic->start();
                     attributeBar->show();
-                    attributeBar->setPixmap(QPixmap(":/picture/attribute.png"));
+                    attributeBar->setPixmap(QPixmap(":/thing/picture/attribute.png"));
                     }
                     else if(towerkind==1)
                   { attributeBar->setGeometry(270,529,239,109);
                     attributeBarPic->start();
                     attributeBar->show();
-                    attributeBar->setPixmap(QPixmap(":/picture/attribute3.png"));
+                    attributeBar->setPixmap(QPixmap(":/thing/picture/attribute3.png"));
                     }
                     else if(towerkind==2)
                   { attributeBar->setGeometry(270,529,239,109);
                     attributeBarPic->start();
                     attributeBar->show();
-                    attributeBar->setPixmap(QPixmap(":/picture/attribute2.png"));
+                    attributeBar->setPixmap(QPixmap(":/thing/picture/attribute2.png"));
                     }
 
 
@@ -493,8 +576,10 @@ void Scene::mousePressEvent(QMouseEvent *event)
               attackRate->setText(QString("%1").arg(currenttower->getRate()));
               attackRate->show();
               attackRate->raise();
+              upgradesound->play();
 
           }
+          else cantdosound->play();
 
       }
 //tris-upgrade
@@ -522,7 +607,9 @@ void Scene::mousePressEvent(QMouseEvent *event)
                   attackRate->setText(QString("%1").arg(currenttower->getRate()));
                   attackRate->show();
                   attackRate->raise();
+                  upgradesound->play();
               }
+              else cantdosound->play();
 
           }
 //Morgana-upgrade
@@ -549,7 +636,9 @@ void Scene::mousePressEvent(QMouseEvent *event)
                   attackRate->setText(QString("%1").arg(currenttower->getRate()));
                   attackRate->show();
                   attackRate->raise();
+                  upgradesound->play();
               }
+              else cantdosound->play();
 
           }
 
@@ -669,19 +758,19 @@ void CanyonScene::mousePressEvent(QMouseEvent *event)
                       { attributeBar->setGeometry(180,529,239,109);
                         attributeBarPic->start();
                         attributeBar->show();
-                        attributeBar->setPixmap(QPixmap(":/picture/attribute.png"));
+                        attributeBar->setPixmap(QPixmap(":/thing/picture/attribute.png"));
                         }
                         else if(towerkind==1)
                       { attributeBar->setGeometry(180,529,239,109);
                         attributeBarPic->start();
                         attributeBar->show();
-                        attributeBar->setPixmap(QPixmap(":/picture/attribute3.png"));
+                        attributeBar->setPixmap(QPixmap(":/thing/picture/attribute3.png"));
                         }
                         else if(towerkind==2)
                       { attributeBar->setGeometry(180,529,239,109);
                         attributeBarPic->start();
                         attributeBar->show();
-                        attributeBar->setPixmap(QPixmap(":/picture/attribute2.png"));
+                        attributeBar->setPixmap(QPixmap(":/thing/picture/attribute2.png"));
                         }
 
 
@@ -943,38 +1032,30 @@ void Scene::setTowerup(){
     lab11->show();
    // lab11->setPixmap(QPixmap(":/picture/pic.png"));
     lab11->raise();
-//    AsheTowerCopy->setGeometry(180, 40, 100, 70);
-//    asheTowerCopy->start();
-//    AsheTowerCopy->show();
-//    AsheTowerCopy->setMovie(asheTowerCopy);
-//    AsheTowerCopy->raise();
 
-
-//    lab12->setStyleSheet("QLabel{border: 1px solid /*#000000*/white;} QLabel:hover{border:1px groove #EE0000;}");
-//    lab12->setGeometry(400, 520,260, 110);//中凸点
-//    lab12->show();
-   // lab11->
-   // lab12->raise();
 
    setCopyup();
 
   //设置退出按钮
    exit->setParent(this);//放在当前窗口下
-   exit->move(700,0);
-   connect(exit,&MyPushButton::clicked,[=](){
-       //弹跳特效
-       exit->upbounce();
-       exit->downbounce();
-   });
-  // exit->setGeometry(700, 0, 60, 60);
+   exit->move(0,0);
+   connect(exit, SIGNAL(clicked()), this, SLOT(leave()));
+   qDebug()<<"i can leave()"<<endl;
    exit->setFlat(true);
- //  exit->setIcon(QIcon(":/image/Leave.png"));
    exit->setIconSize(QSize(60,60));
    exit->setStyleSheet("background: transparent");
    exit->setCursor(Qt::PointingHandCursor);
   // connect(exit, SIGNAL(clicked()), this, SLOT(leave()));
    exit->show();
    exit->raise();
+//设置继续按钮，只在游戏结束界面显示
+   Continue->setParent(this);//放在当前窗口下
+   Continue->move(445,520);
+   Continue->setFlat(true);
+   Continue->setIconSize(QSize(300,300));
+   Continue->setStyleSheet("background: transparent");
+   Continue->setCursor(Qt::PointingHandCursor);
+   connect(Continue, SIGNAL(clicked()), this, SLOT(leave()));
 //金币
    MoneyFront->setGeometry(610, 600, 60, 60);
    MoneyFront->setFont(QFont("Calibri", 14));
@@ -1126,13 +1207,10 @@ void CanyonScene::setTowerup(){
 
   //设置退出按钮
    exit->setParent(this);//放在当前窗口下
-   exit->move(700,0);
-   connect(exit,&MyPushButton::clicked,[=](){
-       //弹跳特效
-       exit->upbounce();
-       exit->downbounce();
-   });
- ;
+   exit->move(0,0);
+
+  connect(exit, SIGNAL(clicked()), this, SLOT(leave()));
+
    exit->setFlat(true);
    exit->setIconSize(QSize(60,60));
    exit->setStyleSheet("background: transparent");
@@ -1140,6 +1218,14 @@ void CanyonScene::setTowerup(){
   // connect(exit, SIGNAL(clicked()), this, SLOT(leave()));
    exit->show();
    exit->raise();
+ //设置继续按钮，只在游戏结束界面显示
+      Continue->setParent(this);//放在当前窗口下
+      Continue->move(445,520);
+      Continue->setFlat(true);
+      Continue->setIconSize(QSize(300,300));
+      Continue->setStyleSheet("background: transparent");
+      Continue->setCursor(Qt::PointingHandCursor);
+      connect(Continue, SIGNAL(clicked()), this, SLOT(leave()));
 //金币
    MoneyFront->setGeometry(520, 600, 80, 60);
    MoneyFront->setFont(QFont("Calibri", 14));
@@ -1225,28 +1311,28 @@ void Scene::setCopyup()
     statusBar->setGeometry(805,1,397,34);
     statusBarPic->start();
     statusBar->show();
-    statusBar->setPixmap(QPixmap(":/picture/statebar.png"));
+    statusBar->setPixmap(QPixmap(":/thing/picture/statebar.png"));
 
 //设置塔工具栏
     copyBar->setGeometry(490, 530, 260, 110);
     copyBarPic->start();
     copyBar->show();
-    copyBar->setPixmap(QPixmap(":/picture/copybase.png"));
+    copyBar->setPixmap(QPixmap(":/thing/picture/copybase.png"));
    // copyBar->raise();
 //ashetower-copy
-     Copy *ashetowercopy = new AsheTowerCopy(this);
+
      ashetowercopy->setGeometry(510, 540 , 45, 45);
      towerCopy.append(ashetowercopy);//将元素放到列表中
      ashetowercopy->show();
      ashetowercopy->raise();
 //tristanatower-copy
-     Copy *tristanatowercopy = new TristanaTowerCopy(this);
+
      tristanatowercopy->setGeometry(565, 540 , 45, 45);
      towerCopy.append(tristanatowercopy);//将元素放到列表中
      tristanatowercopy->show();
      tristanatowercopy->raise();
 //Morganatower-copy
-     Copy *Morganatowercopy = new MorganaTowerCopy(this);
+
      Morganatowercopy->setGeometry(620, 540 , 45, 45);
      towerCopy.append(Morganatowercopy);//将元素放到列表中
      Morganatowercopy->show();
@@ -1259,28 +1345,28 @@ void CanyonScene::setCopyup()
     statusBar->setGeometry(805,1,397,34);
     statusBarPic->start();
     statusBar->show();
-    statusBar->setPixmap(QPixmap(":/picture/statebar.png"));
+    statusBar->setPixmap(QPixmap(":/thing/picture/statebar.png"));
 
 //设置塔工具栏
     copyBar->setGeometry(400, 530, 260, 110);
     copyBarPic->start();
     copyBar->show();
-    copyBar->setPixmap(QPixmap(":/picture/copybase.png"));
+    copyBar->setPixmap(QPixmap(":/thing/picture/copybase.png"));
    // copyBar->raise();
 //ashetower-copy
-     Copy *ashetowercopy = new AsheTowerCopy(this);
+
      ashetowercopy->setGeometry(420, 540 , 45, 45);
      towerCopy.append(ashetowercopy);//将元素放到列表中
      ashetowercopy->show();
      ashetowercopy->raise();
 //tristanatower-copy
-     Copy *tristanatowercopy = new TristanaTowerCopy(this);
+
      tristanatowercopy->setGeometry(475, 540 , 45, 45);
      towerCopy.append(tristanatowercopy);//将元素放到列表中
      tristanatowercopy->show();
      tristanatowercopy->raise();
 //Morganatower-copy
-     Copy *Morganatowercopy = new MorganaTowerCopy(this);
+
      Morganatowercopy->setGeometry(530, 540 , 45, 45);
      towerCopy.append(Morganatowercopy);//将元素放到列表中
      Morganatowercopy->show();
@@ -1436,7 +1522,9 @@ void Scene::removedEnemy(Enemy *enemy)
   //      qDebug()<<"++waves "<<waves<<endl;
         if (!loadWave())
         {
-//			m_gameWin = true;
+            gameWin = true;
+            basesound->stop();
+            winsound->play();
 
         }
     }
@@ -1455,7 +1543,9 @@ void CanyonScene::removedEnemy(Enemy *enemy)
   //      qDebug()<<"++waves "<<waves<<endl;
         if (!loadWave())
         {
-        //m_gameWin = true;
+            gameWin = true;
+            basesound->stop();
+            winsound->play();
 
         }
     }
@@ -1684,20 +1774,36 @@ void BaseScene::drawkillednum(){
 void BaseScene::getbaselife(){
     baselife++;
  //   qDebug()<<"baselife"<<baselife<<endl;
-    if(baselife>1)
+
+    if(baselife>8)
        {
   //      qDebug()<<"dogameover"<<endl;
-       // dogameover();
+        dogameover();
 }
 }
 void BaseScene::getkilled_enemies(){
     killed_enemies++;
+    if(killed_enemies==14)
+       {
+        godlike= new QSound(":/AudioConvert/godlike.wav",this);
+        godlike->play();
+    }
+    if(killed_enemies>=15)
+    {
+        godlike= new QSound("://AudioConvert/legendary.wav",this);
+        godlike->play();
+    }
+
 }
 
 void BaseScene::dogameover()
 {if (!gameEnded)
     {
-        gameEnded = true;}
+        gameEnded = true;
+        basesound->stop();
+        defeatsound->play();
+
+    }
 }
 
 ChoiceScene::ChoiceScene(QWidget* parent):QLabel(parent)
@@ -1714,30 +1820,47 @@ ChoiceScene::ChoiceScene(QWidget* parent):QLabel(parent)
     this->background->start();
     this->show();
 
-    MyPushButton *choicebtn1=new MyPushButton(":/picture/choice1.png");
-    MyPushButton *choicebtn2=new MyPushButton(":/picture/choice2.png");
+
+    choicesound->setLoops(-1);
+    choicesound->play();
+
+
+    MyPushButton *choicebtn1=new MyPushButton(":/thing/picture/choice1.png");
+    MyPushButton *choicebtn2=new MyPushButton(":/thing/picture/choice2.png");
+    MyPushButton *exit = new MyPushButton(":/thing/picture/toplay.png");
     choicebtn1->setParent(this);//放在当前窗口下
     choicebtn2->setParent(this);
+    exit->setParent(this);
     choicebtn1->move(191,100);
     choicebtn2->move(800,100);
+    exit->move(500,600);
+    exit->show();
+//返回
+    connect(exit,&MyPushButton::clicked,[=](){
+        emit toTitle();
+        choicesound->stop();
+    });
+
 //canyon
     connect(choicebtn1,&MyPushButton::clicked,[=](){
-
     choicebtn1->upbounce();
     choicebtn1->downbounce();
  //延时500秒触发
     QTimer::singleShot(500,this,[=](){
-    playCanyon();
+
+        playCanyon();
+        choicesound->stop();
     });
     });
 //polar
     connect(choicebtn2,&MyPushButton::clicked,[=](){
-
     choicebtn2->upbounce();
     choicebtn2->downbounce();
   //延时500秒触发
     QTimer::singleShot(500,this,[=](){
     playPolar();
+    choicesound->stop();
+
     });
     });
 
@@ -1755,16 +1878,71 @@ ChoiceScene::ChoiceScene(QWidget* parent):QLabel(parent)
     choicebtn2->show();
     choicebtn2->raise();
 
+    exit->setFlat(true);
+    exit->setIconSize(QSize(300,300));
+    exit->setStyleSheet("background: transparent");
+    exit->setCursor(Qt::PointingHandCursor);
+    exit->show();
+    exit->raise();
+    qDebug()<<"ok to choicescene1"<<endl;
+
 }
 ChoiceScene::~ChoiceScene()
 {
     delete this->background;
     delete this->scene;
+    delete this->timer;
 }
-
+void ChoiceScene::onTimer(){
+    emit toTitle();
+}
 void ChoiceScene::playPolar(){
+
+//    if (choices)
+//    {
+//        delete choices;
+//        choices = nullptr;
+//    }
+    //remember to delete !!!
     scene= new Scene(this);
+    choicesound->stop();
+    connect(this->scene, SIGNAL(leavescene()), this, SLOT(back()));
+    qDebug()<<"get back"<<endl;
 }
 void ChoiceScene::playCanyon(){
-    canyonscene= new CanyonScene(this);
+
+     scene= new CanyonScene(this);
+     choicesound->stop();
+    connect(this->scene, SIGNAL(leavescene()), this, SLOT(back()));
+
 }
+void ChoiceScene::back()
+{  qDebug()<<"i can back()"<<endl;
+    this->setFixedSize(1200, 639);
+    choicesound->play();
+    if (scene)
+    {   qDebug()<<"i can back()1"<<endl;
+        //ChoiceScene * chosce=new ChoiceScene;
+      //  delete scene;
+        scene->hide();
+
+        this->show();
+        qDebug()<<"ok to delete scene"<<endl;
+        scene = nullptr;
+        qDebug()<<"ok to set nullptr"<<endl;
+    }
+
+    qDebug()<<"!!"<<endl;
+}
+void Scene::leave(){
+    basesound->stop();
+
+    qDebug()<<"i can leave()2"<<endl;
+    emit leavescene();
+    qDebug()<<"i can leave()3"<<endl;
+}
+void CanyonScene::leave(){
+    basesound->stop();
+    emit leavescene();
+}
+
